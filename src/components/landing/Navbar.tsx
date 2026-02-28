@@ -1,11 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = ["Features", "Clans", "Leaderboard", "Pricing"];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
+
+  function handleLogin() {
+    login();
+    router.push("/dashboard");
+  }
 
   return (
     <nav className="fixed w-full z-50 top-0 left-0 bg-[#09090b]/90 backdrop-blur-md border-b border-white/10">
@@ -37,10 +46,10 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-6">
-            <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wide">
+            <button onClick={handleLogin} className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wide">
               Login
             </button>
-            <button className="btn-synth px-6 py-2.5 text-sm">
+            <button onClick={handleLogin} className="btn-synth px-6 py-2.5 text-sm">
               Start Quest
             </button>
           </div>
@@ -72,10 +81,10 @@ export default function Navbar() {
             </a>
           ))}
           <div className="flex flex-col gap-3 pt-2 border-t border-white/10">
-            <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wide text-left">
+            <button onClick={handleLogin} className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wide text-left">
               Login
             </button>
-            <button className="btn-synth px-6 py-3 text-sm">
+            <button onClick={handleLogin} className="btn-synth px-6 py-3 text-sm">
               Start Quest
             </button>
           </div>
