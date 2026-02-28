@@ -44,7 +44,7 @@ export default function DashboardNavbar() {
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
-              href="#"
+              href={link.label === "Builder" ? "/builder" : "#"}
               className={`text-sm font-medium leading-normal transition-colors whitespace-nowrap ${
                 link.active
                   ? "text-[#ff00ff] font-bold border-b-2 border-[#ff00ff] pb-1"
@@ -102,7 +102,7 @@ export default function DashboardNavbar() {
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
-              href="#"
+              href={link.label === "Builder" ? "/builder" : "#"}
               className={`text-sm font-medium ${
                 link.active ? "text-[#ff00ff] font-bold" : "text-[#9ca3af]"
               }`}
