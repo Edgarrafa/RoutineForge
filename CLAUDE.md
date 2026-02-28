@@ -36,7 +36,7 @@ src/
 │   ├── UserContext.tsx      # useUser() → { user, logCalories, logWeight }
 │   └── SessionContext.tsx   # useSession() → { exercises, currentIndex, restTimeLeft, startRestTimer, ... }
 ├── data/
-│   └── mockData.ts          # MOCK_USER, SESSION_EXERCISES, WORKOUT_NAME
+│   └── mockData.ts          # MOCK_USER, SESSION_EXERCISES, WORKOUT_NAME, COMMUNITY_WORKOUTS, RECENT_ROUTINES
 ├── types/
 │   └── index.ts             # User, SessionExercise, SetEntry
 └── lib/utils.ts             # cn() helper
