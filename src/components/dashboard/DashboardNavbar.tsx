@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = [
-  { label: "Dashboard", active: true },
-  { label: "My Workout", active: false },
-  { label: "Builder", active: false },
-  { label: "History", active: false },
-  { label: "Community", active: false },
-  { label: "Settings", active: false },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "My Workout", href: "/workout" },
+  { label: "Builder", href: "/builder" },
+  { label: "History", href: "#" },
+  { label: "Community", href: "#" },
+  { label: "Settings", href: "#" },
 ];
 
 const AVATAR =
@@ -20,10 +20,15 @@ export default function DashboardNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   function handleLogout() {
     logout();
     router.push("/");
+  }
+
+  function isActive(href: string) {
+    return pathname === href;
   }
 
   return (
@@ -44,9 +49,9 @@ export default function DashboardNavbar() {
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
-              href={link.label === "Builder" ? "/builder" : "#"}
+              href={link.href}
               className={`text-sm font-medium leading-normal transition-colors whitespace-nowrap ${
-                link.active
+                isActive(link.href)
                   ? "text-[#ff00ff] font-bold border-b-2 border-[#ff00ff] pb-1"
                   : "text-[#9ca3af] hover:text-[#00f3ff]"
               }`}
@@ -102,9 +107,9 @@ export default function DashboardNavbar() {
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
-              href={link.label === "Builder" ? "/builder" : "#"}
+              href={link.href}
               className={`text-sm font-medium ${
-                link.active ? "text-[#ff00ff] font-bold" : "text-[#9ca3af]"
+                isActive(link.href) ? "text-[#ff00ff] font-bold" : "text-[#9ca3af]"
               }`}
               onClick={() => setMobileOpen(false)}
             >
