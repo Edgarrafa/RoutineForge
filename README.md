@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## RoutineForge
+
+RoutineForge is a gamified fitness RPG web app where training feels like progression in a game. Users can explore workouts, run guided sessions, build programs, and track character-style stats through a neon cyber-fantasy UI.
+
+## Features
+
+- **Landing experience** with themed sections for hero content, workout paths, character sheet, and call-to-action
+- **Mock auth flow** using localStorage and protected pages with anti-flash redirect behavior
+- **Dashboard** with workout-of-the-day, quick stats, community favorites, and recent routines
+- **Workout overview** with today’s focus, weekly schedule, milestones, and progression cards
+- **Program Builder** full-screen layout with sidebar + day canvas workflow for assembling routines
+- **Active Session** full-screen guided workout flow with exercise logging, rest timer, and routine progress
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router) + React 19
+- **Styling:** Tailwind CSS v4 + global theme tokens in `src/app/globals.css`
+- **UI primitives:** shadcn/ui v3 components in `src/components/ui`
+- **State/Context:** Auth, User, and Session context providers
+- **Language/tooling:** TypeScript + ESLint
+
+## App Routes
+
+- `/` — landing page
+- `/dashboard` — protected dashboard
+- `/workout` — protected workout overview
+- `/builder` — protected program builder
+- `/session` — protected active workout session
+
+## Project Structure
+
+```text
+src/
+	app/           # App Router pages + global styles
+	components/    # Feature components (landing, dashboard, workout, builder, session, ui)
+	context/       # AuthContext, UserContext, SessionContext
+	data/          # Mock data and seeded content
+	types/         # Shared TypeScript types
+	lib/           # Utility helpers
+```
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — run local dev server
+- `npm run build` — create production build
+- `npm run start` — run production server
+- `npm run lint` — run ESLint
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Authentication is mocked via localStorage (`rf_auth`) for frontend flow development.
+- Shared mock data is defined in `src/data/mockData.ts`.
+- Material Symbols icons are loaded via a `<link>` tag in the root layout.
