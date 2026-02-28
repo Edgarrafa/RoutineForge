@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ExerciseLibraryModal, { type LibraryExercise } from "./ExerciseLibraryModal";
 
 const WEEKS = ["WEEK 1", "WEEK 2", "WEEK 3", "WEEK 4", "WEEK 5"];
 
@@ -63,6 +64,7 @@ const HEATMAP_WEEKS = [
 export default function BuilderMain() {
   const [activeWeek, setActiveWeek] = useState(0);
   const [exercises, setExercises] = useState<Exercise[]>(INITIAL_EXERCISES);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function updateExercise(id: number, field: keyof Exercise, value: string) {
     setExercises((prev) =>
@@ -70,8 +72,30 @@ export default function BuilderMain() {
     );
   }
 
+  function handleAddFromLibrary(libEx: LibraryExercise) {
+    setExercises((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name: libEx.name,
+        category: `${libEx.equipment} • ${libEx.subcategory}`,
+        image: libEx.image ?? "",
+        sets: "3",
+        reps: "8-12",
+        rpe: "8",
+      },
+    ]);
+    setIsModalOpen(false);
+  }
+
   return (
     <section className="flex-1 flex flex-col min-w-0 bg-[#0d060a]/30 relative">
+      {isModalOpen && (
+        <ExerciseLibraryModal
+          onClose={() => setIsModalOpen(false)}
+          onAdd={handleAddFromLibrary}
+        />
+      )}
       {/* Week Navigation Tabs */}
       <div className="flex items-center border-b border-[#f4257b]/20 bg-[#0d060a]/80 backdrop-blur-sm overflow-x-auto hide-scroll">
         <button className="h-14 px-4 border-r border-[#f4257b]/10 hover:bg-white/5 text-slate-400 flex items-center justify-center sticky left-0 bg-[#0d060a]/80 z-10">
@@ -145,12 +169,12 @@ export default function BuilderMain() {
                 <div className="mt-2 text-slate-500 cursor-grab">
                   <span className="material-symbols-outlined text-lg">drag_indicator</span>
                 </div>
-                <div className="size-16 rounded bg-slate-800 shrink-0 overflow-hidden">
-                  <img
-                    src={ex.image}
-                    alt={ex.name}
-                    className="w-full h-full object-cover opacity-80"
-                  />
+                <div className="size-16 rounded bg-[#0d060a] border border-white/5 shrink-0 overflow-hidden flex items-center justify-center">
+                  {ex.image ? (
+                    <img src={ex.image} alt={ex.name} className="w-full h-full object-cover opacity-80" />
+                  ) : (
+                    <span className="material-symbols-outlined text-2xl text-gray-700">fitness_center</span>
+                  )}
                 </div>
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                   <div className="md:col-span-4">
@@ -178,7 +202,10 @@ export default function BuilderMain() {
             ))}
 
             {/* Add Exercise */}
-            <button className="w-full py-4 rounded-lg border-2 border-dashed border-[#f4257b]/30 text-[#f4257b]/70 hover:text-white hover:border-[#f4257b] hover:bg-[#f4257b]/10 transition-all flex items-center justify-center gap-2 group/add">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full py-4 rounded-lg border-2 border-dashed border-[#f4257b]/30 text-[#f4257b]/70 hover:text-white hover:border-[#f4257b] hover:bg-[#f4257b]/10 transition-all flex items-center justify-center gap-2 group/add"
+            >
               <span className="material-symbols-outlined group-hover/add:scale-110 transition-transform">
                 add_circle
               </span>
