@@ -29,3 +29,26 @@ export type SetEntry = {
   reps: string;
   logged: boolean;
 };
+
+export type CommunityWorkout = {
+  name: string;
+  tags: string[];
+  rating: string | null;
+  count: string;
+  countColor: string;
+  hoverBorder: string;
+  hoverShadow: string;
+  hoverTitle: string;
+  image: string;
+};
+
+export type RecentRoutine = {
+  name: string;
+  meta: string;
+  stat: string;
+  icon: string;
+  accentColor: string;
+  accentOpacity: string;
+  hoverTitle: string;
+  gradientFrom: string;
+};
