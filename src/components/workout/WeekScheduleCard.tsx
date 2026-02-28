@@ -1,6 +1,9 @@
-const DAYS = [
+"use client";
+
+import { useState } from "react";
+
+const BASE_DAYS = [
   {
-    short: "Mon 23",
     name: "Upper Body Power",
     sub: "4 Exercises",
     icon: "fitness_center",
@@ -8,7 +11,6 @@ const DAYS = [
     today: true,
   },
   {
-    short: "Tue 24",
     name: "Lower Body Power",
     sub: "5 Exercises",
     icon: "fitness_center",
@@ -16,7 +18,6 @@ const DAYS = [
     today: false,
   },
   {
-    short: "Wed 25",
     name: "Active Recovery",
     sub: "Cardio & Abs",
     icon: "directions_run",
@@ -25,7 +26,6 @@ const DAYS = [
     dim: true,
   },
   {
-    short: "Thu 26",
     name: "Back & Shoulders",
     sub: "Hypertrophy",
     icon: "fitness_center",
@@ -33,7 +33,6 @@ const DAYS = [
     today: false,
   },
   {
-    short: "Fri 27",
     name: "Legs & Arms",
     sub: "Hypertrophy",
     icon: "fitness_center",
@@ -41,7 +40,6 @@ const DAYS = [
     today: false,
   },
   {
-    short: "Sat 28",
     name: "Conditioning",
     sub: "HIIT",
     icon: "timer",
@@ -50,7 +48,6 @@ const DAYS = [
     dim: true,
   },
   {
-    short: "Sun 29",
     name: "Rest Day",
     sub: "",
     icon: "hotel",
@@ -60,7 +57,29 @@ const DAYS = [
   },
 ];
 
+const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+const BASE_DATE = new Date(2024, 9, 23); // Oct 23, 2024
+
+function getWeekRange(offset: number) {
+  const start = new Date(BASE_DATE);
+  start.setDate(start.getDate() + offset * 7);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 6);
+  const fmt = (d: Date) =>
+    d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return `${fmt(start)} – ${fmt(end)}`;
+}
+
+function getDayDate(dayIdx: number, offset: number) {
+  const d = new Date(BASE_DATE);
+  d.setDate(d.getDate() + offset * 7 + dayIdx);
+  return `${DAY_NAMES[dayIdx]} ${d.getDate()}`;
+}
+
 export default function WeekScheduleCard() {
+  const [weekOffset, setWeekOffset] = useState(0);
+
   return (
     <div className="cyber-card rounded-xl p-6 relative overflow-hidden">
       {/* Decorative icon */}
@@ -85,11 +104,19 @@ export default function WeekScheduleCard() {
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          <button className="text-gray-400 hover:text-white transition-colors">
+          <button
+            onClick={() => setWeekOffset((v) => v - 1)}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
             <span className="material-symbols-outlined">chevron_left</span>
           </button>
-          <span className="text-sm font-bold text-white uppercase tracking-wider">Oct 23 – Oct 29</span>
-          <button className="text-gray-400 hover:text-white transition-colors">
+          <span className="text-sm font-bold text-white uppercase tracking-wider min-w-[160px] text-center">
+            {getWeekRange(weekOffset)}
+          </span>
+          <button
+            onClick={() => setWeekOffset((v) => v + 1)}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
             <span className="material-symbols-outlined">chevron_right</span>
           </button>
         </div>
@@ -97,14 +124,17 @@ export default function WeekScheduleCard() {
 
       {/* 7-day grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 relative z-10">
-        {DAYS.map((day) => {
+        {BASE_DAYS.map((day, i) => {
+          const isToday = day.today && weekOffset === 0;
+          const short = getDayDate(i, weekOffset);
+
           if (day.rest) {
             return (
               <div
-                key={day.short}
+                key={i}
                 className="bg-[#1a1a24]/50 border border-white/5 rounded-lg p-3 flex flex-col justify-between"
               >
-                <div className="text-[10px] text-gray-600 font-bold uppercase mb-2">{day.short}</div>
+                <div className="text-[10px] text-gray-600 font-bold uppercase mb-2">{short}</div>
                 <div className="text-sm font-bold text-gray-500 mb-1 leading-tight italic">{day.name}</div>
                 <div className="mt-2">
                   <span className="material-symbols-outlined text-gray-700 text-sm">{day.icon}</span>
@@ -113,14 +143,14 @@ export default function WeekScheduleCard() {
             );
           }
 
-          if (day.today) {
+          if (isToday) {
             return (
               <div
-                key={day.short}
+                key={i}
                 className="group relative bg-[#a855f7]/10 border border-[#a855f7] rounded-lg p-3 hover:bg-[#a855f7]/20 transition-all cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.15)]"
               >
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#a855f7] rounded-full animate-pulse shadow-[0_0_8px_#a855f7]" />
-                <div className="text-[10px] text-[#a855f7] font-bold uppercase mb-2">{day.short}</div>
+                <div className="text-[10px] text-[#a855f7] font-bold uppercase mb-2">{short}</div>
                 <div className="text-sm font-bold text-white mb-1 leading-tight">{day.name}</div>
                 <div className="text-[10px] text-gray-400">{day.sub}</div>
                 <div className="mt-2 flex justify-between items-center">
@@ -135,10 +165,10 @@ export default function WeekScheduleCard() {
 
           return (
             <div
-              key={day.short}
+              key={i}
               className={`group bg-white/5 border border-white/5 rounded-lg p-3 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer ${day.dim ? "opacity-75" : ""}`}
             >
-              <div className="text-[10px] text-gray-500 font-bold uppercase mb-2">{day.short}</div>
+              <div className="text-[10px] text-gray-500 font-bold uppercase mb-2">{short}</div>
               <div className="text-sm font-bold text-gray-300 mb-1 leading-tight">{day.name}</div>
               <div className="text-[10px] text-gray-500">{day.sub}</div>
               <div className="mt-2">

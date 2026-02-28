@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/context/SessionContext";
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60).toString().padStart(2, "0");
@@ -12,6 +13,7 @@ function formatTime(seconds: number) {
 export default function SessionHeader() {
   const [elapsed, setElapsed] = useState(0);
   const router = useRouter();
+  const { workoutName } = useSession();
 
   useEffect(() => {
     const t = setInterval(() => setElapsed((e) => e + 1), 1000);
@@ -24,7 +26,7 @@ export default function SessionHeader() {
       <div className="flex items-center gap-3">
         <div className="w-2.5 h-2.5 rounded-full bg-[#ec4899] animate-pulse shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
         <h1 className="font-[family-name:var(--font-orbitron)] font-bold text-white tracking-widest uppercase text-lg">
-          Upper Body Power
+          {workoutName}
         </h1>
       </div>
 

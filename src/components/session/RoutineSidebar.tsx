@@ -1,3 +1,7 @@
+"use client";
+
+import { useSession } from "@/context/SessionContext";
+
 const XP_TOTAL = 850;
 const XP_CURRENT = 450;
 
@@ -8,14 +12,6 @@ type RoutineItem = {
   status: ExerciseStatus;
   superset?: boolean;
 };
-
-const ROUTINE: RoutineItem[] = [
-  { name: "Warmup Flow", status: "done" },
-  { name: "Bench Press", status: "active" },
-  { name: "Overhead Press", status: "pending", superset: true },
-  { name: "Barbell Rows", status: "pending", superset: true },
-  { name: "Skullcrushers", status: "pending" },
-];
 
 function ExerciseRow({ item }: { item: RoutineItem }) {
   if (item.status === "done") {
@@ -52,9 +48,19 @@ function ExerciseRow({ item }: { item: RoutineItem }) {
 }
 
 export default function RoutineSidebar() {
-  const supersetItems = ROUTINE.filter((r) => r.superset);
-  const nonSupersetBefore = ROUTINE.filter((r) => !r.superset && ROUTINE.indexOf(r) < ROUTINE.findIndex((x) => x.superset));
-  const nonSupersetAfter = ROUTINE.filter((r) => !r.superset && ROUTINE.indexOf(r) > ROUTINE.findLastIndex((x) => x.superset));
+  const { exercises, currentIndex } = useSession();
+
+  const routine: RoutineItem[] = exercises.map((ex, i) => ({
+    name: ex.name,
+    status: i < currentIndex ? "done" : i === currentIndex ? "active" : "pending",
+    superset: ex.superset,
+  }));
+
+  const supersetItems = routine.filter((r) => r.superset);
+  const firstSupersetIdx = routine.findIndex((x) => x.superset);
+  const lastSupersetIdx = routine.findLastIndex((x) => x.superset);
+  const nonSupersetBefore = routine.filter((r, i) => !r.superset && i < firstSupersetIdx);
+  const nonSupersetAfter = routine.filter((r, i) => !r.superset && i > lastSupersetIdx);
 
   return (
     <aside className="w-52 shrink-0 border-r border-white/5 bg-[#0a0a0f] flex flex-col overflow-y-auto">

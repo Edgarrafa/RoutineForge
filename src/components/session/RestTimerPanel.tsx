@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useSession } from "@/context/SessionContext";
 
-const TOTAL_REST = 120;
 const RADIUS = 54;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
@@ -13,27 +13,11 @@ function formatTime(s: number) {
 }
 
 export default function RestTimerPanel() {
-  const [timeLeft, setTimeLeft] = useState(45);
-  const [isRunning, setIsRunning] = useState(true);
+  const { restTimeLeft, restIsRunning, restTotal, addRestTime, skipRest } = useSession();
+  const [isPlaying, setIsPlaying] = useState(true);
 
-  useEffect(() => {
-    if (!isRunning || timeLeft <= 0) return;
-    const t = setTimeout(() => setTimeLeft((v) => v - 1), 1000);
-    return () => clearTimeout(t);
-  }, [timeLeft, isRunning]);
-
-  const progress = timeLeft / TOTAL_REST;
+  const progress = restTotal > 0 ? restTimeLeft / restTotal : 0;
   const dashOffset = CIRCUMFERENCE * (1 - progress);
-
-  function addTime(s: number) {
-    setTimeLeft((v) => Math.min(v + s, TOTAL_REST));
-    setIsRunning(true);
-  }
-
-  function skip() {
-    setTimeLeft(0);
-    setIsRunning(false);
-  }
 
   return (
     <aside className="w-64 shrink-0 border-l border-white/5 bg-[#0a0a0f] flex flex-col overflow-y-auto">
@@ -58,30 +42,38 @@ export default function RestTimerPanel() {
               <circle
                 cx={60} cy={60} r={RADIUS}
                 fill="none"
-                stroke="#ec4899"
+                stroke={restTimeLeft === 0 && restTotal > 0 ? "#10b981" : "#ec4899"}
                 strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray={CIRCUMFERENCE}
                 strokeDashoffset={dashOffset}
                 transform="rotate(-90 60 60)"
-                style={{ transition: "stroke-dashoffset 1s linear", filter: "drop-shadow(0 0 6px rgba(236,72,153,0.6))" }}
+                style={{
+                  transition: "stroke-dashoffset 1s linear",
+                  filter: restTimeLeft === 0 && restTotal > 0
+                    ? "drop-shadow(0 0 6px rgba(16,185,129,0.6))"
+                    : "drop-shadow(0 0 6px rgba(236,72,153,0.6))",
+                }}
               />
             </svg>
             {/* Time in center */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="font-[family-name:var(--font-orbitron)] text-white font-bold text-2xl tracking-wider">
-                {formatTime(timeLeft)}
+                {formatTime(restTimeLeft)}
               </span>
-              {timeLeft > 0 && (
+              {restIsRunning && restTimeLeft > 0 && (
                 <span
                   className="text-[10px] text-[#ec4899] font-bold mt-0.5 cursor-pointer hover:text-white"
-                  onClick={() => addTime(10)}
+                  onClick={() => addRestTime(10)}
                 >
                   +10S
                 </span>
               )}
-              {timeLeft === 0 && (
+              {restTotal > 0 && restTimeLeft === 0 && (
                 <span className="text-[10px] text-[#10b981] font-bold animate-pulse">GO!</span>
+              )}
+              {restTotal === 0 && (
+                <span className="text-[10px] text-gray-500 font-bold">Log a set</span>
               )}
             </div>
           </div>
@@ -90,13 +82,13 @@ export default function RestTimerPanel() {
         {/* Controls */}
         <div className="grid grid-cols-2 gap-2">
           <button
-            onClick={() => addTime(30)}
+            onClick={() => addRestTime(30)}
             className="py-2.5 rounded-lg border border-white/20 text-sm font-bold text-white hover:bg-white/10 transition-colors"
           >
             +30S
           </button>
           <button
-            onClick={skip}
+            onClick={skipRest}
             className="py-2.5 rounded-lg border border-white/20 text-sm font-bold text-white hover:bg-white/10 transition-colors"
           >
             Skip
@@ -120,8 +112,13 @@ export default function RestTimerPanel() {
               <button className="text-gray-400 hover:text-white transition-colors">
                 <span className="material-symbols-outlined text-lg">skip_previous</span>
               </button>
-              <button className="w-7 h-7 rounded-full bg-[#ec4899] flex items-center justify-center hover:bg-[#ec4899]/80 transition-colors shadow-[0_0_8px_rgba(236,72,153,0.4)]">
-                <span className="material-symbols-outlined text-white text-base">pause</span>
+              <button
+                onClick={() => setIsPlaying((v) => !v)}
+                className="w-7 h-7 rounded-full bg-[#ec4899] flex items-center justify-center hover:bg-[#ec4899]/80 transition-colors shadow-[0_0_8px_rgba(236,72,153,0.4)]"
+              >
+                <span className="material-symbols-outlined text-white text-base">
+                  {isPlaying ? "pause" : "play_arrow"}
+                </span>
               </button>
               <button className="text-gray-400 hover:text-white transition-colors">
                 <span className="material-symbols-outlined text-lg">skip_next</span>

@@ -1,0 +1,86 @@
+import type { User, SessionExercise } from "@/types";
+
+export const MOCK_USER: User = {
+  name: "Cyber Lifter",
+  username: "Cyberlifter_99",
+  level: 8,
+  title: "Pro Trainer",
+  xp: 450,
+  xpToNext: 850,
+  streak: 7,
+  avatarUrl:
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuCnGSaVLQOKuXpjMHtZR3KEnW2Pl8lTJrz6f97gf1AuBqMWQiTrAGXHGLQHbpFjOvuMhvmPdBMK8hL8kQ4TSSq3RNLzVy4mhHbRTBBBM4DfvU3wJFGR6pA3Nbn63Bn1TvUHDTJdxjmxLYJiNlqTBv3loxZ9k4b36hKlsgtm3v8F-1OYZl7o-vJfnvVxmPfTYX8LXJqXmE9mvCY_uCPNaHWUvxM9Z2qT-gJijFlXRLNNZi5JriqAJlK0Yg-yp2sW9kbkStgT0iMog",
+};
+
+export const SESSION_EXERCISES: SessionExercise[] = [
+  {
+    id: "warmup",
+    name: "Warmup Flow",
+    numSets: 1,
+    targetReps: "10 min",
+    defaultWeight: "",
+    lastPerf: null,
+    restSeconds: 60,
+    muscleGroup: "Full Body",
+    category: "Warmup",
+    badge: "Warmup",
+    image: "",
+  },
+  {
+    id: "bench",
+    name: "Bench Press",
+    numSets: 4,
+    targetReps: "8-10",
+    defaultWeight: "185",
+    lastPerf: "185lbs x 8",
+    restSeconds: 120,
+    muscleGroup: "Chest, Triceps",
+    category: "Compound",
+    badge: "Compound",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAL5cZserwafB4yxdyewFy9Ns58dLiND0qlgWhp5bMKiqIHOIE338bmIR2a3J9AvecffODcVu_1SYhuX3jELXW9tFdRnHariSmcbwm-KDMSC9DgNgbhGTW2x3U3tU0-TLhS_r7C8EfepKPZUxbIJmYsZsPUSVXv9vgtB7QgAvnu5diuzkxr_q0EqrS8OjvBbOtybQQCv9eZOzMfhVBYNL13aDAvfaPpV1U5tZdlauLyGPv3-IeZy9qk5efE-uhmwyF_evBeQXqyjss",
+  },
+  {
+    id: "ohp",
+    name: "Overhead Press",
+    numSets: 3,
+    targetReps: "8-10",
+    defaultWeight: "135",
+    lastPerf: "135lbs x 8",
+    restSeconds: 90,
+    muscleGroup: "Shoulders, Triceps",
+    category: "Compound",
+    badge: "Compound",
+    superset: true,
+    image: "",
+  },
+  {
+    id: "rows",
+    name: "Barbell Rows",
+    numSets: 3,
+    targetReps: "10",
+    defaultWeight: "155",
+    lastPerf: "155lbs x 10",
+    restSeconds: 90,
+    muscleGroup: "Back, Biceps",
+    category: "Compound",
+    badge: "Compound",
+    superset: true,
+    image: "",
+  },
+  {
+    id: "skulls",
+    name: "Skullcrushers",
+    numSets: 3,
+    targetReps: "12",
+    defaultWeight: "65",
+    lastPerf: "65lbs x 12",
+    restSeconds: 90,
+    muscleGroup: "Triceps",
+    category: "Isolation",
+    badge: "Isolation",
+    image: "",
+  },
+];
+
+export const WORKOUT_NAME = "Upper Body Power";

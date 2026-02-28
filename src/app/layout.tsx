@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Orbitron, Inter, Lexend, Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import { UserProvider } from "@/context/UserContext";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -51,7 +52,9 @@ export default function RootLayout({
       <body
         className={`${orbitron.variable} ${inter.variable} ${lexend.variable} ${spaceGrotesk.variable} antialiased`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <UserProvider>{children}</UserProvider>
+        </AuthProvider>
       </body>
     </html>
   );

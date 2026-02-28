@@ -1,31 +1,32 @@
 "use client";
 
 import { useState } from "react";
-
-const BG_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuAL5cZserwafB4yxdyewFy9Ns58dLiND0qlgWhp5bMKiqIHOIE338bmIR2a3J9AvecffODcVu_1SYhuX3jELXW9tFdRnHariSmcbwm-KDMSC9DgNgbhGTW2x3U3tU0-TLhS_r7C8EfepKPZUxbIJmYsZsPUSVXv9vgtB7QgAvnu5diuzkxr_q0EqrS8OjvBbOtybQQCv9eZOzMfhVBYNL13aDAvfaPpV1U5tZdlauLyGPv3-IeZy9qk5efE-uhmwyF_evBeQXqyjss";
-
-type SetEntry = {
-  weight: string;
-  reps: string;
-  logged: boolean;
-};
-
-const INITIAL_SETS: SetEntry[] = [
-  { weight: "185", reps: "10", logged: true },
-  { weight: "185", reps: "9", logged: true },
-  { weight: "185", reps: "", logged: false },
-  { weight: "", reps: "", logged: false },
-];
-
-const DROP_INITIAL = { weight: "135", reps: "", logged: false };
+import { useSession } from "@/context/SessionContext";
+import type { SetEntry } from "@/types";
 
 export default function ExerciseCard() {
-  const [sets, setSets] = useState<SetEntry[]>(INITIAL_SETS);
-  const [drop, setDrop] = useState(DROP_INITIAL);
-  const [hasDropset, setHasDropset] = useState(true);
+  const { exercises, currentIndex, startRestTimer, advanceExercise } = useSession();
+  const ex = exercises[currentIndex];
+
+  const [sets, setSets] = useState<SetEntry[]>(
+    Array.from({ length: ex.numSets }, () => ({
+      weight: ex.defaultWeight,
+      reps: "",
+      logged: false,
+    }))
+  );
+  const [drop, setDrop] = useState({
+    weight: ex.defaultWeight ? String(Math.round(Number(ex.defaultWeight) * 0.75)) : "",
+    reps: "",
+    logged: false,
+  });
+  const [hasDropset, setHasDropset] = useState(false);
 
   const activeIndex = sets.findIndex((s) => !s.logged);
+  const allDone = sets.every((s) => s.logged);
+  const isLastExercise = currentIndex >= exercises.length - 1;
+  const nextExercise = exercises[currentIndex + 1];
+  const completedCount = sets.filter((s) => s.logged).length;
 
   function updateSet(index: number, field: keyof SetEntry, value: string) {
     setSets((prev) => prev.map((s, i) => (i === index ? { ...s, [field]: value } : s)));
@@ -33,47 +34,55 @@ export default function ExerciseCard() {
 
   function logSet(index: number) {
     setSets((prev) => prev.map((s, i) => (i === index ? { ...s, logged: true } : s)));
+    startRestTimer(ex.restSeconds);
   }
 
   function logDrop() {
     setDrop((d) => ({ ...d, logged: true }));
+    startRestTimer(ex.restSeconds);
   }
-
-  const completedCount = sets.filter((s) => s.logged).length;
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative bg-[#0d0d14]">
       {/* Exercise header with background */}
       <div className="relative h-52 shrink-0 overflow-hidden">
-        <img src={BG_IMAGE} alt="Exercise" className="w-full h-full object-cover opacity-30" />
+        {ex.image ? (
+          <img src={ex.image} alt="Exercise" className="w-full h-full object-cover opacity-30" />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-[#1a0a12] to-[#0d0d14]" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0d0d14]" />
         <div className="absolute inset-0 p-6 flex flex-col justify-end">
           {/* Badge */}
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 bg-[#ec4899] text-white text-[10px] font-black uppercase tracking-widest rounded">
-              Compound
-            </span>
-            <span className="text-xs text-gray-300">Target: Chest, Triceps</span>
+            {ex.badge && (
+              <span className="px-2.5 py-0.5 bg-[#ec4899] text-white text-[10px] font-black uppercase tracking-widest rounded">
+                {ex.badge}
+              </span>
+            )}
+            <span className="text-xs text-gray-300">Target: {ex.muscleGroup}</span>
           </div>
           {/* Title row */}
           <div className="flex items-end justify-between">
             <div>
               <h2 className="text-4xl font-[family-name:var(--font-orbitron)] font-black text-white tracking-wide">
-                Bench Press
+                {ex.name}
               </h2>
               <div className="flex items-center gap-4 mt-1.5 text-xs text-gray-400 font-mono">
                 <span className="flex items-center gap-1">
                   <span className="material-symbols-outlined text-sm text-gray-500">sync</span>
-                  4 Sets
+                  {ex.numSets} Sets
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="material-symbols-outlined text-sm text-gray-500">north_east</span>
-                  8-10 Reps
+                  {ex.targetReps} Reps
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="material-symbols-outlined text-sm text-gray-500">history</span>
-                  Last: 185lbs x 8
-                </span>
+                {ex.lastPerf && (
+                  <span className="flex items-center gap-1">
+                    <span className="material-symbols-outlined text-sm text-gray-500">history</span>
+                    Last: {ex.lastPerf}
+                  </span>
+                )}
               </div>
             </div>
             <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors">
@@ -89,22 +98,26 @@ export default function ExerciseCard() {
           {/* Set header */}
           <div className="flex items-center justify-between mb-4">
             <span className="font-bold text-white text-lg">
-              Set {Math.min(activeIndex + 1, sets.length)} of {sets.length}
+              {allDone
+                ? `All ${sets.length} sets done!`
+                : `Set ${Math.min(activeIndex + 1, sets.length)} of ${sets.length}`}
             </span>
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => setHasDropset((v) => !v)}
-                className={`flex items-center gap-1 px-3 py-1 rounded border text-xs font-bold uppercase tracking-wider transition-colors ${
-                  hasDropset
-                    ? "border-[#a855f7]/60 text-[#a855f7] bg-[#a855f7]/10"
-                    : "border-white/20 text-gray-400 hover:border-white/40"
-                }`}
-              >
-                <span className="material-symbols-outlined text-sm">add</span>
-                Dropset
-              </button>
+              {ex.defaultWeight && (
+                <button
+                  onClick={() => setHasDropset((v) => !v)}
+                  className={`flex items-center gap-1 px-3 py-1 rounded border text-xs font-bold uppercase tracking-wider transition-colors ${
+                    hasDropset
+                      ? "border-[#a855f7]/60 text-[#a855f7] bg-[#a855f7]/10"
+                      : "border-white/20 text-gray-400 hover:border-white/40"
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-sm">add</span>
+                  Dropset
+                </button>
+              )}
               <span className="text-xs text-gray-500 font-mono uppercase tracking-wider">
-                Rest Target: 120s
+                Rest Target: {ex.restSeconds}s
               </span>
             </div>
           </div>
@@ -154,7 +167,7 @@ export default function ExerciseCard() {
                       type="text"
                       value={set.weight}
                       onChange={(e) => updateSet(i, "weight", e.target.value)}
-                      disabled={isFuture}
+                      disabled={isFuture || set.logged}
                       placeholder="—"
                       className={`text-center rounded-lg py-2 text-sm font-bold bg-black/40 text-white placeholder:text-gray-600 focus:outline-none transition-all ${
                         isActive
@@ -168,7 +181,7 @@ export default function ExerciseCard() {
                       type="text"
                       value={set.reps}
                       onChange={(e) => updateSet(i, "reps", e.target.value)}
-                      disabled={isFuture}
+                      disabled={isFuture || set.logged}
                       placeholder="—"
                       className={`text-center rounded-lg py-2 text-sm font-bold bg-black/40 text-white placeholder:text-gray-600 focus:outline-none transition-all ${
                         isActive
@@ -241,21 +254,46 @@ export default function ExerciseCard() {
               );
             })}
           </div>
+
+          {/* Complete exercise button */}
+          {allDone && (
+            <div className="mt-6 flex justify-center">
+              {isLastExercise ? (
+                <div className="flex items-center gap-2 px-6 py-3 rounded-lg bg-[#10b981]/20 border border-[#10b981] text-[#10b981] font-bold text-lg">
+                  🎉 Workout Complete!
+                </div>
+              ) : (
+                <button
+                  onClick={advanceExercise}
+                  className="flex items-center gap-2 px-6 py-3 rounded-lg bg-[#10b981] text-white font-bold uppercase tracking-wider hover:bg-[#10b981]/80 transition-colors shadow-[0_0_20px_rgba(16,185,129,0.4)]"
+                >
+                  Next Exercise
+                  <span className="material-symbols-outlined">arrow_forward</span>
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Coming up next — pinned bottom */}
       <div className="shrink-0 border-t border-white/10 bg-[#0a0a0f]/90 backdrop-blur px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Coming up next</span>
-          <div className="flex items-center gap-2">
-            <span className="text-[#a855f7] font-bold text-sm">∞</span>
-            <span className="text-sm font-bold text-white">Superset: Overhead Press + Rows</span>
-          </div>
+          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+            {isLastExercise ? "Final Exercise" : "Coming up next"}
+          </span>
+          {nextExercise ? (
+            <div className="flex items-center gap-2">
+              {nextExercise.superset && <span className="text-[#a855f7] font-bold text-sm">∞</span>}
+              <span className="text-sm font-bold text-white">{nextExercise.name}</span>
+            </div>
+          ) : (
+            <span className="text-sm font-bold text-[#10b981]">You&apos;re on the last one!</span>
+          )}
         </div>
-        <button className="text-xs text-gray-400 hover:text-white underline transition-colors">
-          View Details
-        </button>
+        <span className="text-xs text-gray-500 font-mono">
+          {completedCount}/{sets.length} sets
+        </span>
       </div>
     </div>
   );

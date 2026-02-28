@@ -14,6 +14,12 @@ export default function ProgramSidebar() {
   const [tags, setTags] = useState(INITIAL_TAGS);
   const [tagInput, setTagInput] = useState("");
   const [isPublic, setIsPublic] = useState(true);
+  const [saved, setSaved] = useState(false);
+
+  function handleSave() {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  }
 
   function removeTag(label: string) {
     setTags((t) => t.filter((tag) => tag.label !== label));
@@ -171,9 +177,16 @@ export default function ProgramSidebar() {
             />
           </button>
         </div>
-        <button className="w-full flex items-center justify-center gap-2 py-3 bg-[#39ff14] text-[#0d060a] font-bold uppercase tracking-wider rounded shadow-[0_0_10px_rgba(57,255,20,0.5)] hover:brightness-110 transition-all text-sm">
-          <span className="material-symbols-outlined text-lg">save</span>
-          Save Program
+        <button
+          onClick={handleSave}
+          className={`w-full flex items-center justify-center gap-2 py-3 font-bold uppercase tracking-wider rounded transition-all text-sm ${
+            saved
+              ? "bg-[#10b981] text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+              : "bg-[#39ff14] text-[#0d060a] shadow-[0_0_10px_rgba(57,255,20,0.5)] hover:brightness-110"
+          }`}
+        >
+          <span className="material-symbols-outlined text-lg">{saved ? "check_circle" : "save"}</span>
+          {saved ? "Saved!" : "Save Program"}
         </button>
       </div>
     </aside>

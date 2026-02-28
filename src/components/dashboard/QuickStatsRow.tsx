@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useUser } from "@/context/UserContext";
 
 const BARS = [
   { day: "M", volume: 30, reps: 40 },
@@ -13,8 +14,29 @@ const BARS = [
 ];
 
 export default function QuickStatsRow() {
+  const { user, logCalories, logWeight } = useUser();
   const [calories, setCalories] = useState("");
   const [weight, setWeight] = useState("");
+  const [calSaved, setCalSaved] = useState(false);
+  const [wtSaved, setWtSaved] = useState(false);
+
+  function handleLogCalories() {
+    const val = Number(calories);
+    if (!val) return;
+    logCalories(val);
+    setCalories("");
+    setCalSaved(true);
+    setTimeout(() => setCalSaved(false), 1500);
+  }
+
+  function handleLogWeight() {
+    const val = Number(weight);
+    if (!val) return;
+    logWeight(val);
+    setWeight("");
+    setWtSaved(true);
+    setTimeout(() => setWtSaved(false), 1500);
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-32">
@@ -33,14 +55,24 @@ export default function QuickStatsRow() {
                 placeholder="Calories"
                 value={calories}
                 onChange={(e) => setCalories(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLogCalories()}
                 className="w-full bg-[#050510] text-white border border-[#2d2d55] rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#bc13fe] focus:ring-1 focus:ring-[#bc13fe] placeholder-gray-600 transition-all"
               />
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 text-[10px] font-medium">
                 kcal
               </span>
             </div>
-            <button className="bg-[#2d2d55] hover:bg-[#bc13fe] hover:text-white text-[#9ca3af] border border-[#2d2d55] rounded p-1 transition-all">
-              <span className="material-symbols-outlined text-sm">add</span>
+            <button
+              onClick={handleLogCalories}
+              className={`border rounded p-1 transition-all ${
+                calSaved
+                  ? "bg-[#10b981] border-[#10b981] text-white"
+                  : "bg-[#2d2d55] hover:bg-[#bc13fe] hover:text-white text-[#9ca3af] border-[#2d2d55]"
+              }`}
+            >
+              <span className="material-symbols-outlined text-sm">
+                {calSaved ? "check" : "add"}
+              </span>
             </button>
           </div>
           {/* Weight */}
@@ -51,14 +83,24 @@ export default function QuickStatsRow() {
                 placeholder="Weight"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLogWeight()}
                 className="w-full bg-[#050510] text-white border border-[#2d2d55] rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#bc13fe] focus:ring-1 focus:ring-[#bc13fe] placeholder-gray-600 transition-all"
               />
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 text-[10px] font-medium">
                 kg
               </span>
             </div>
-            <button className="bg-[#2d2d55] hover:bg-[#bc13fe] hover:text-white text-[#9ca3af] border border-[#2d2d55] rounded p-1 transition-all">
-              <span className="material-symbols-outlined text-sm">add</span>
+            <button
+              onClick={handleLogWeight}
+              className={`border rounded p-1 transition-all ${
+                wtSaved
+                  ? "bg-[#10b981] border-[#10b981] text-white"
+                  : "bg-[#2d2d55] hover:bg-[#bc13fe] hover:text-white text-[#9ca3af] border-[#2d2d55]"
+              }`}
+            >
+              <span className="material-symbols-outlined text-sm">
+                {wtSaved ? "check" : "add"}
+              </span>
             </button>
           </div>
         </div>
@@ -117,7 +159,7 @@ export default function QuickStatsRow() {
           <span className="text-4xl select-none">🔥</span>
           <div className="flex flex-col items-center">
             <span className="text-2xl font-black text-white italic leading-none font-[family-name:var(--font-lexend)]">
-              7
+              {user.streak}
             </span>
             <span className="text-[10px] uppercase font-bold text-orange-500 tracking-wider">
               Day Streak

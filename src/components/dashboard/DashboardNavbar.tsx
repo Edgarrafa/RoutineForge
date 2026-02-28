@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useUser } from "@/context/UserContext";
 
 const NAV_LINKS = [
   { label: "Dashboard", href: "/dashboard" },
@@ -13,12 +14,10 @@ const NAV_LINKS = [
   { label: "Settings", href: "#" },
 ];
 
-const AVATAR =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuAGMKLMgq_VRjtj0KlIUk0W1JhPw1yBEn4hhKtDjtmwciLUbKMXnRXcRTgYaSj7cKOqU5rIrNlmG_TbZn_R86A9qGY1tb9rTw9vdRsie8Q5Jd0gi7BXdvhgY4BFH6bvyUAGoRFkYJZM3N2IpRy4Sbepc_BYTUnDaAkQl1Vx91JOlu_rIWHzUCtcJHlGXJz_cousvJbfgOhBZ6ugbFwlY_vC_TxB6jS-RyjR5wnnSXTvx8AD3W56eZV9jfigGzRdAVG16jG2C3zZOzQ";
-
 export default function DashboardNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useAuth();
+  const { user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -67,7 +66,7 @@ export default function DashboardNavbar() {
           <div className="hidden lg:flex items-center gap-3 bg-[#0f0f23] border border-[#2d2d55] rounded-full px-4 py-1.5 shadow-[0_0_10px_rgba(188,19,254,0.3)]">
             <div className="flex flex-col items-end">
               <span className="text-[#00f3ff] text-xs font-bold uppercase tracking-widest">
-                Level 8 Lifter
+                Level {user.level} {user.title}
               </span>
               <div className="w-24 h-1.5 bg-gray-800 rounded-full mt-1 overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-[#bc13fe] to-[#ff00ff] w-[85%] shadow-[0_0_10px_rgba(255,0,255,0.7)]" />
@@ -85,7 +84,7 @@ export default function DashboardNavbar() {
             onClick={handleLogout}
             title="Logout"
             className="w-10 h-10 rounded-full bg-cover bg-center bg-no-repeat ring-2 ring-[#bc13fe] shadow-[0_0_15px_rgba(188,19,254,0.5)] hover:ring-[#ff00ff] transition-all shrink-0"
-            style={{ backgroundImage: `url("${AVATAR}")` }}
+            style={{ backgroundImage: `url("${user.avatarUrl}")` }}
           />
 
           {/* Mobile hamburger */}

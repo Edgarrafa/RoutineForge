@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const BG_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuCpA1uL1rJFs3LJKa-0yEu4F8u-Is5tyl8ThMNMSEZf_p7QyUX1SEwgDgzuQONyYPtpQgFPxic_jF5yUX5MRzh2uQ0DpLqzk3_EdZvbtiVad7m8jjuCxTw5S1D-fx3EHErvC9APh2PE-E7ZBgNZlGTO7kFmK_bMXRtHcMIVAHN3gp4zrfm3Iu2DGGzqRT0rlsKXo0rteDfDw06WUWMGGmb80x8ySXqY203Kj0lOEzo6mximU8X70k8ceOsREvO_Cur4QA9T5u_sDuk";
 
@@ -50,10 +52,10 @@ export default function WotdCard() {
 
         {/* Right: CTAs */}
         <div className="flex flex-col items-stretch gap-3 w-full sm:w-52 shrink-0">
-          <button className="w-full bg-[#ff00ff] hover:bg-[#ff00ff]/90 text-black font-black uppercase tracking-wider py-3 px-6 rounded-lg shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 font-[family-name:var(--font-lexend)]">
+          <Link href="/session" className="w-full bg-[#ff00ff] hover:bg-[#ff00ff]/90 text-black font-black uppercase tracking-wider py-3 px-6 rounded-lg shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 font-[family-name:var(--font-lexend)]">
             <span className="material-symbols-outlined">play_arrow</span>
             Start Logging
-          </button>
+          </Link>
           <button className="w-full bg-[#050510]/50 border border-[#2d2d55] hover:border-[#9ca3af] text-[#9ca3af] text-xs py-2 px-4 rounded flex items-center justify-between transition-colors">
             <span>Skip Today</span>
             <span className="material-symbols-outlined text-sm">expand_more</span>

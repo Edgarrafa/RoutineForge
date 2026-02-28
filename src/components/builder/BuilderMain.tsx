@@ -65,6 +65,13 @@ export default function BuilderMain() {
   const [activeWeek, setActiveWeek] = useState(0);
   const [exercises, setExercises] = useState<Exercise[]>(INITIAL_EXERCISES);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRestDay, setIsRestDay] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   function updateExercise(id: number, field: keyof Exercise, value: string) {
     setExercises((prev) =>
@@ -98,7 +105,10 @@ export default function BuilderMain() {
       )}
       {/* Week Navigation Tabs */}
       <div className="flex items-center border-b border-[#f4257b]/20 bg-[#0d060a]/80 backdrop-blur-sm overflow-x-auto hide-scroll">
-        <button className="h-14 px-4 border-r border-[#f4257b]/10 hover:bg-white/5 text-slate-400 flex items-center justify-center sticky left-0 bg-[#0d060a]/80 z-10">
+        <button
+          onClick={() => setActiveWeek((v) => Math.max(0, v - 1))}
+          className="h-14 px-4 border-r border-[#f4257b]/10 hover:bg-white/5 text-slate-400 flex items-center justify-center sticky left-0 bg-[#0d060a]/80 z-10"
+        >
           <span className="material-symbols-outlined">chevron_left</span>
         </button>
 
@@ -124,7 +134,10 @@ export default function BuilderMain() {
           </button>
         ))}
 
-        <button className="h-14 px-4 border-l border-[#f4257b]/10 hover:bg-white/5 text-slate-400 flex items-center justify-center ml-auto sticky right-0 bg-[#0d060a]/80 z-10">
+        <button
+          onClick={() => setActiveWeek((v) => Math.min(WEEKS.length - 1, v + 1))}
+          className="h-14 px-4 border-l border-[#f4257b]/10 hover:bg-white/5 text-slate-400 flex items-center justify-center ml-auto sticky right-0 bg-[#0d060a]/80 z-10"
+        >
           <span className="material-symbols-outlined">chevron_right</span>
         </button>
       </div>
@@ -132,7 +145,29 @@ export default function BuilderMain() {
       {/* Scrollable Day Canvas */}
       <div className="flex-1 overflow-y-auto p-8 space-y-8 pb-56">
 
-        {/* Day 1 — Expanded/Active */}
+        {/* Day 1 — Expanded/Active or Rest */}
+        {isRestDay ? (
+          <div className="relative rounded-xl border border-white/5 bg-[#0d060a]/20">
+            <div className="flex items-center justify-between p-4 opacity-70 hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-center justify-center size-12 rounded bg-[#0d060a] border border-white/5">
+                  <span className="text-[10px] text-slate-600 uppercase font-bold">Day</span>
+                  <span className="text-xl font-bold text-slate-500 leading-none">01</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-400 tracking-wide italic flex items-center gap-2">
+                  <span className="material-symbols-outlined">hotel</span>
+                  Rest Day
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsRestDay(false)}
+                className="text-xs text-slate-500 hover:text-white underline"
+              >
+                Change
+              </button>
+            </div>
+          </div>
+        ) : (
         <div className="relative rounded-xl border border-[#f4257b]/30 bg-[#1a0f14]/80 shadow-lg overflow-hidden transition-all hover:border-[#f4257b]/50">
           {/* Day header */}
           <div className="flex items-center justify-between p-4 border-b border-[#f4257b]/10 bg-white/5">
@@ -147,13 +182,23 @@ export default function BuilderMain() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
-                <span className="material-symbols-outlined text-sm">content_copy</span> Copy
+              <button
+                onClick={handleCopy}
+                className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <span className="material-symbols-outlined text-sm">content_copy</span>
+                {copied ? "Copied!" : "Copy"}
               </button>
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-medium text-slate-400 hover:text-red-400 hover:bg-red-400/10 transition-colors">
+              <button
+                onClick={() => setExercises([])}
+                className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-medium text-slate-400 hover:text-red-400 hover:bg-red-400/10 transition-colors"
+              >
                 <span className="material-symbols-outlined text-sm">delete</span> Clear
               </button>
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-700 text-xs font-medium text-slate-300 hover:border-slate-500 transition-colors">
+              <button
+                onClick={() => setIsRestDay(true)}
+                className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-700 text-xs font-medium text-slate-300 hover:border-slate-500 transition-colors"
+              >
                 <span className="material-symbols-outlined text-sm">hotel</span> Mark Rest
               </button>
             </div>
@@ -213,6 +258,7 @@ export default function BuilderMain() {
             </button>
           </div>
         </div>
+        )}
 
         {/* Day 2 — Empty */}
         <div className="relative group rounded-xl border border-white/10 bg-[#1a0f14]/40 hover:bg-[#1a0f14]/80 transition-all">
@@ -229,7 +275,10 @@ export default function BuilderMain() {
                 <p className="text-xs text-slate-500">Empty Routine</p>
               </div>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#f4257b]/10 text-[#f4257b] border border-[#f4257b]/20 hover:bg-[#f4257b] hover:text-white transition-all shadow-[0_0_10px_rgba(244,37,123,0.3)] opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#f4257b]/10 text-[#f4257b] border border-[#f4257b]/20 hover:bg-[#f4257b] hover:text-white transition-all shadow-[0_0_10px_rgba(244,37,123,0.3)] opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
+            >
               <span className="material-symbols-outlined text-sm">add</span>
               <span className="text-xs font-bold uppercase">Build</span>
             </button>
