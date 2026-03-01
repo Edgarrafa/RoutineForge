@@ -1,3 +1,8 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+
 const AVATARS = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuCIQs5tegz3_bcP3kDLY3A5VPD2BOLajJerZa4OMbSZYevMS_ltdUheB-VcrrScdZjrUr50I2KnOToxxKEM-WXAD4QFZhxRbqXNOptyEwF8_jpxrwODA4aubsi8Z0Fnt7EWQqFZMn1Qj6AWoRBTzJ91FfTF0wcIgDe4FMrW2EdMlsO_y9CyLCM-O2kbLf7G04S78E6GvTDcbjerYW5R0ly4cNCynHRkoDikFaQ7zTIdd6PowyZ5DED05NEoG2UzrmqU_yc20PVaKns",
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDItN54ANJtojfXpbzPL-ekM4gbrkumhSgVE95H9n2tGNZzFbUmfgyvCTO-2HU9MvNF5VL_7Uau_9_3lJYrHGCqdgEw9JXO4nlcX1qSUL9Sf2M9qF2XPKsrbjA1Go5xbn0xXp2CJO2BCZbhxL6vu6FneGLo-QjLxRizLZ9wIFWQ48KNcFZQXfm559gUq424fYTzVJdhn5Ieu5UfCKlZEQvz8MOsU9zEz3aTlEzoxL5IqJgD_aUUZ4FUff7KjwyQWD9C6kCRtsvXJ7k",
@@ -5,6 +10,18 @@ const AVATARS = [
 ];
 
 export default function HeroSection() {
+  const { login, isLoggedIn } = useAuth();
+  const router = useRouter();
+
+  function handleStart() {
+    if (!isLoggedIn) login();
+    router.push("/dashboard");
+  }
+
+  function handleExplorePaths() {
+    document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 overflow-hidden min-h-screen flex items-center">
       {/* Grid background */}
@@ -48,11 +65,14 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <button className="btn-synth w-full sm:w-auto px-10 py-4 text-lg">
+          <button onClick={handleStart} className="btn-synth w-full sm:w-auto px-10 py-4 text-lg">
             <span className="material-symbols-outlined">bolt</span>
-            Start Your Quest
+            {isLoggedIn ? "Go to Dashboard" : "Start Your Quest"}
           </button>
-          <button className="w-full sm:w-auto bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-[#ec4899]/50 px-10 py-4 rounded-full text-lg font-bold transition-all flex items-center justify-center gap-3 backdrop-blur-sm group">
+          <button
+            onClick={handleExplorePaths}
+            className="w-full sm:w-auto bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-[#ec4899]/50 px-10 py-4 rounded-full text-lg font-bold transition-all flex items-center justify-center gap-3 backdrop-blur-sm group"
+          >
             <span className="material-symbols-outlined group-hover:text-[#ec4899] transition-colors">
               explore
             </span>

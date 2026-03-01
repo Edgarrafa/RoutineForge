@@ -12,11 +12,17 @@ export default function Home() {
     <main className="min-h-screen bg-[#09090b] text-white overflow-x-hidden">
       <Navbar />
       <HeroSection />
-      <RoutineCreatorSection />
-      <CharacterSheetSection />
-      <WorkoutPathsSection />
-      <ClanSection />
-      <CtaSection />
+      <div id="features">
+        <RoutineCreatorSection />
+        <CharacterSheetSection />
+        <WorkoutPathsSection />
+      </div>
+      <div id="clans">
+        <ClanSection />
+      </div>
+      <div id="pricing">
+        <CtaSection />
+      </div>
       <Footer />
     </main>
   );
