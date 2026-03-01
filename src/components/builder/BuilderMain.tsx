@@ -138,7 +138,11 @@ const HEATMAP_WEEKS = [
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function BuilderMain() {
+type Props = {
+  onBack?: () => void;
+};
+
+export default function BuilderMain({ onBack }: Props) {
   const [weeks, setWeeks] = useState<BuilderWeek[]>(INITIAL_WEEKS);
   const [activeWeek, setActiveWeek] = useState(0);
   const [modalForDay, setModalForDay] = useState<number | null>(null);
@@ -686,6 +690,15 @@ export default function BuilderMain() {
 
       {/* Week Navigation Tabs */}
       <div className="flex items-center border-b border-[#f4257b]/20 bg-[#0d060a]/80 backdrop-blur-sm overflow-x-auto hide-scroll">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="h-14 px-4 border-r border-[#f4257b]/10 hover:bg-white/5 text-slate-600 hover:text-white flex items-center gap-1.5 transition-all text-[10px] font-bold uppercase tracking-wider shrink-0"
+          >
+            <span className="material-symbols-outlined text-sm">arrow_back</span>
+            Type
+          </button>
+        )}
         <button
           onClick={() => setActiveWeek((v) => Math.max(0, v - 1))}
           className="h-14 px-4 border-r border-[#f4257b]/10 hover:bg-white/5 text-slate-400 flex items-center justify-center sticky left-0 bg-[#0d060a]/80 z-10"

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import BuilderHeader from "@/components/builder/BuilderHeader";
+import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import BuilderTypeSelector from "@/components/builder/BuilderTypeSelector";
 import DayBuilder from "@/components/builder/DayBuilder";
 import WeeklyBuilder from "@/components/builder/WeeklyBuilder";
@@ -25,6 +25,8 @@ export default function BuilderPage() {
 
   if (!mounted || !isLoggedIn) return null;
 
+  const handleBack = builderType ? () => setBuilderType(null) : undefined;
+
   return (
     <div className="h-screen overflow-hidden flex flex-col bg-[#0d060a] font-[family-name:var(--font-grotesk)] relative">
       {/* Background effects */}
@@ -42,18 +44,18 @@ export default function BuilderPage() {
         />
       </div>
 
-      <BuilderHeader onBack={builderType ? () => setBuilderType(null) : undefined} />
+      <DashboardNavbar />
 
       <main className="relative z-10 flex flex-1 overflow-hidden">
         {!builderType && (
           <BuilderTypeSelector onSelect={setBuilderType} />
         )}
-        {builderType === "day" && <DayBuilder />}
-        {builderType === "weekly" && <WeeklyBuilder />}
+        {builderType === "day" && <DayBuilder onBack={handleBack} />}
+        {builderType === "weekly" && <WeeklyBuilder onBack={handleBack} />}
         {builderType === "program" && (
           <>
             <ProgramSidebar builderType="program" />
-            <BuilderMain />
+            <BuilderMain onBack={handleBack} />
           </>
         )}
       </main>

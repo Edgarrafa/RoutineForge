@@ -3,66 +3,32 @@
 import { useState } from "react";
 
 const BASE_DAYS = [
-  {
-    name: "Upper Body Power",
-    sub: "4 Exercises",
-    icon: "fitness_center",
-    iconColor: "text-[#a855f7]",
-    today: true,
-  },
-  {
-    name: "Lower Body Power",
-    sub: "5 Exercises",
-    icon: "fitness_center",
-    iconColor: "text-gray-600",
-    today: false,
-  },
-  {
-    name: "Active Recovery",
-    sub: "Cardio & Abs",
-    icon: "directions_run",
-    iconColor: "text-[#06b6d4] opacity-50",
-    today: false,
-    dim: true,
-  },
-  {
-    name: "Back & Shoulders",
-    sub: "Hypertrophy",
-    icon: "fitness_center",
-    iconColor: "text-gray-600",
-    today: false,
-  },
-  {
-    name: "Legs & Arms",
-    sub: "Hypertrophy",
-    icon: "fitness_center",
-    iconColor: "text-gray-600",
-    today: false,
-  },
-  {
-    name: "Conditioning",
-    sub: "HIIT",
-    icon: "timer",
-    iconColor: "text-yellow-500 opacity-50",
-    today: false,
-    dim: true,
-  },
-  {
-    name: "Rest Day",
-    sub: "",
-    icon: "hotel",
-    iconColor: "text-gray-700",
-    today: false,
-    rest: true,
-  },
+  { name: "Upper Body Power",  sub: "4 Exercises",   icon: "fitness_center", iconColor: "text-[#a855f7]" },
+  { name: "Lower Body Power",  sub: "5 Exercises",   icon: "fitness_center", iconColor: "text-gray-600" },
+  { name: "Active Recovery",   sub: "Cardio & Abs",  icon: "directions_run", iconColor: "text-[#06b6d4] opacity-50", dim: true },
+  { name: "Back & Shoulders",  sub: "Hypertrophy",   icon: "fitness_center", iconColor: "text-gray-600" },
+  { name: "Legs & Arms",       sub: "Hypertrophy",   icon: "fitness_center", iconColor: "text-gray-600" },
+  { name: "Conditioning",      sub: "HIIT",           icon: "timer",          iconColor: "text-yellow-500 opacity-50", dim: true },
+  { name: "Rest Day",          sub: "",               icon: "hotel",          iconColor: "text-gray-700", rest: true },
 ];
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const BASE_DATE = new Date(2024, 9, 23); // Oct 23, 2024
+// Monday of the current week (computed once at module load)
+function getMondayOfCurrentWeek(): Date {
+  const now = new Date();
+  const daysSinceMonday = (now.getDay() + 6) % 7; // 0=Mon … 6=Sun
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - daysSinceMonday);
+  monday.setHours(0, 0, 0, 0);
+  return monday;
+}
+
+const WEEK_START = getMondayOfCurrentWeek();
+const TODAY_IDX = (new Date().getDay() + 6) % 7; // 0=Mon … 6=Sun
 
 function getWeekRange(offset: number) {
-  const start = new Date(BASE_DATE);
+  const start = new Date(WEEK_START);
   start.setDate(start.getDate() + offset * 7);
   const end = new Date(start);
   end.setDate(end.getDate() + 6);
@@ -72,7 +38,7 @@ function getWeekRange(offset: number) {
 }
 
 function getDayDate(dayIdx: number, offset: number) {
-  const d = new Date(BASE_DATE);
+  const d = new Date(WEEK_START);
   d.setDate(d.getDate() + offset * 7 + dayIdx);
   return `${DAY_NAMES[dayIdx]} ${d.getDate()}`;
 }
@@ -125,7 +91,7 @@ export default function WeekScheduleCard() {
       {/* 7-day grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 relative z-10">
         {BASE_DAYS.map((day, i) => {
-          const isToday = day.today && weekOffset === 0;
+          const isToday = i === TODAY_IDX && weekOffset === 0;
           const short = getDayDate(i, weekOffset);
 
           if (day.rest) {

@@ -11,7 +11,11 @@ function makeId() {
   return _id++;
 }
 
-export default function DayBuilder() {
+type Props = {
+  onBack?: () => void;
+};
+
+export default function DayBuilder({ onBack }: Props) {
   const [exercises, setExercises] = useState<BuilderExercise[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -56,11 +60,22 @@ export default function DayBuilder() {
 
       <section className="flex-1 flex flex-col min-w-0 bg-[#0d060a]/30 relative">
         {/* Canvas header */}
-        <div className="flex items-center gap-4 px-8 py-4 border-b border-[#f4257b]/20 bg-[#0d060a]/60 backdrop-blur-sm shrink-0">
-          <h2 className="text-white font-bold text-lg uppercase tracking-widest">Session Builder</h2>
-          <span className="text-xs font-bold text-[#f4257b] bg-[#f4257b]/10 border border-[#f4257b]/30 px-2 py-0.5 rounded">
-            {exercises.length} exercise{exercises.length !== 1 ? "s" : ""}
-          </span>
+        <div className="flex items-center justify-between px-8 py-4 border-b border-[#f4257b]/20 bg-[#0d060a]/60 backdrop-blur-sm shrink-0">
+          <div className="flex items-center gap-4">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="flex items-center gap-1.5 text-slate-500 hover:text-white transition-colors text-xs font-semibold uppercase tracking-wider"
+              >
+                <span className="material-symbols-outlined text-sm">arrow_back</span>
+                Change Type
+              </button>
+            )}
+            <h2 className="text-white font-bold text-lg uppercase tracking-widest">Session Builder</h2>
+            <span className="text-xs font-bold text-[#f4257b] bg-[#f4257b]/10 border border-[#f4257b]/30 px-2 py-0.5 rounded">
+              {exercises.length} exercise{exercises.length !== 1 ? "s" : ""}
+            </span>
+          </div>
         </div>
 
         {/* Scrollable exercise list */}

@@ -21,7 +21,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-gray-600 text-sm font-mono">
-            &copy; 2025 RoutineForge. All rights reserved.
+            &copy; {new Date().getFullYear()} RoutineForge. All rights reserved.
           </div>
 
           {/* Socials */}

@@ -213,6 +213,7 @@ export const HISTORY_LOGS: WorkoutLog[] = [
     id: "1",
     name: "Upper Body Power",
     date: "Today, 07:30 AM",
+    isoDate: "2026-02-28",
     time: "07:30 AM",
     duration: "58m 20s",
     volume: "12,450 kg",
@@ -271,7 +272,8 @@ export const HISTORY_LOGS: WorkoutLog[] = [
   {
     id: "2",
     name: "Leg Day Volume",
-    date: "Dec 12, 06:15 PM",
+    date: "Feb 24, 06:15 PM",
+    isoDate: "2026-02-24",
     time: "06:15 PM",
     duration: "1h 12m",
     volume: "18,200 kg",
@@ -315,7 +317,8 @@ export const HISTORY_LOGS: WorkoutLog[] = [
   {
     id: "3",
     name: "HIIT Mobility Flow",
-    date: "Dec 10, 07:00 AM",
+    date: "Feb 20, 07:00 AM",
+    isoDate: "2026-02-20",
     time: "07:00 AM",
     duration: "35m 00s",
     volume: "450 kcal",
@@ -331,7 +334,8 @@ export const HISTORY_LOGS: WorkoutLog[] = [
   {
     id: "4",
     name: "5×5 Strength Base",
-    date: "Dec 08, 06:45 PM",
+    date: "Feb 14, 06:45 PM",
+    isoDate: "2026-02-14",
     time: "06:45 PM",
     duration: "52m 10s",
     volume: "10,500 kg",

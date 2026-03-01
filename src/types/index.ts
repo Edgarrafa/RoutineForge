@@ -82,7 +82,8 @@ export type XPBreakdown = {
 export type WorkoutLog = {
   id: string;
   name: string;
-  date: string;
+  date: string;    // Display string, e.g. "Today, 07:30 AM"
+  isoDate: string; // YYYY-MM-DD for calendar/date logic
   time: string;
   duration: string;
   volume: string;

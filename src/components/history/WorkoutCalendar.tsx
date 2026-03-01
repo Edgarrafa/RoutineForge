@@ -1,39 +1,65 @@
 "use client";
 
 import { useState } from "react";
-
-const WORKOUT_DAYS = new Set([1, 3, 4, 6, 8, 10, 12, 15, 17, 19, 22, 24, 26, 29]);
-const TODAY = 12;
+import { HISTORY_LOGS } from "@/data/mockData";
 
 const DAYS_OF_WEEK = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
-// Dec 2023 starts on Friday (index 5)
-const FIRST_DAY_INDEX = 5;
-const TOTAL_DAYS = 31;
+function startOfMonth(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+function getWorkoutDays(year: number, month: number): Set<number> {
+  return new Set(
+    HISTORY_LOGS.filter((log) => {
+      const [y, m] = log.isoDate.split("-").map(Number);
+      return y === year && m === month + 1;
+    }).map((log) => parseInt(log.isoDate.split("-")[2]))
+  );
+}
 
 export default function WorkoutCalendar() {
-  const [month] = useState("December 2023");
+  const now = new Date();
+  const [viewDate, setViewDate] = useState(() => startOfMonth(now));
+
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+
+  const firstDayIndex = new Date(year, month, 1).getDay(); // 0=Sun
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  const monthLabel = viewDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  const isCurrentMonth = year === now.getFullYear() && month === now.getMonth();
+  const todayDay = now.getDate();
+
+  const workoutDays = getWorkoutDays(year, month);
 
   const cells: (number | null)[] = [
-    ...Array(FIRST_DAY_INDEX).fill(null),
-    ...Array.from({ length: TOTAL_DAYS }, (_, i) => i + 1),
+    ...Array(firstDayIndex).fill(null),
+    ...Array.from({ length: totalDays }, (_, i) => i + 1),
   ];
-
-  // Pad to complete last week row
   while (cells.length % 7 !== 0) cells.push(null);
+
+  function prevMonth() {
+    setViewDate(new Date(year, month - 1, 1));
+  }
+
+  function nextMonth() {
+    setViewDate(new Date(year, month + 1, 1));
+  }
 
   return (
     <div className="bg-[#0f0f23] border border-[#2d2d55] rounded-xl p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-white text-sm font-bold uppercase tracking-widest font-[family-name:var(--font-lexend)]">
-          {month}
+          {monthLabel}
         </h3>
         <div className="flex items-center gap-1">
-          <button className="text-[#9ca3af] hover:text-white transition-colors p-1">
+          <button onClick={prevMonth} className="text-[#9ca3af] hover:text-white transition-colors p-1">
             <span className="material-symbols-outlined text-base">chevron_left</span>
           </button>
-          <button className="text-[#9ca3af] hover:text-white transition-colors p-1">
+          <button onClick={nextMonth} className="text-[#9ca3af] hover:text-white transition-colors p-1">
             <span className="material-symbols-outlined text-base">chevron_right</span>
           </button>
         </div>
@@ -52,8 +78,8 @@ export default function WorkoutCalendar() {
       <div className="grid grid-cols-7 gap-y-1">
         {cells.map((day, i) => {
           if (day === null) return <div key={`empty-${i}`} />;
-          const isToday = day === TODAY;
-          const hasWorkout = WORKOUT_DAYS.has(day);
+          const isToday = isCurrentMonth && day === todayDay;
+          const hasWorkout = workoutDays.has(day);
 
           return (
             <div key={day} className="flex flex-col items-center gap-0.5 py-1">

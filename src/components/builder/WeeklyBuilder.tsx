@@ -62,7 +62,11 @@ function templateToBuilderEx(te: TemplateExercise): BuilderExercise {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function WeeklyBuilder() {
+type Props = {
+  onBack?: () => void;
+};
+
+export default function WeeklyBuilder({ onBack }: Props) {
   const [days, setDays] = useState<WeekDay[]>(makeInitialDays());
   const [activeDay, setActiveDay] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
@@ -308,6 +312,15 @@ export default function WeeklyBuilder() {
       <section className="flex-1 flex flex-col min-w-0 bg-[#0d060a]/30 relative">
         {/* Day tab bar */}
         <div className="flex items-stretch border-b border-[#f4257b]/20 bg-[#0d060a]/80 backdrop-blur-sm overflow-x-auto hide-scroll shrink-0">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="flex items-center gap-1.5 px-4 border-r border-[#f4257b]/10 text-slate-600 hover:text-white hover:bg-white/5 transition-all text-[10px] font-bold uppercase tracking-wider shrink-0"
+            >
+              <span className="material-symbols-outlined text-sm">arrow_back</span>
+              Type
+            </button>
+          )}
           {days.map((d, i) => (
             <button
               key={i}
