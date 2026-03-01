@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "My Workout", href: "/workout" },
   { label: "Builder", href: "/builder" },
-  { label: "History", href: "#" },
+  { label: "History", href: "/history" },
   { label: "Community", href: "#" },
   { label: "Settings", href: "#" },
 ];

@@ -1,4 +1,4 @@
-import type { User, SessionExercise, CommunityWorkout, RecentRoutine } from "@/types";
+import type { User, SessionExercise, CommunityWorkout, RecentRoutine, WorkoutLog, Achievement, ExerciseDetail } from "@/types";
 
 export const MOCK_USER: User = {
   name: "Cyber Lifter",
@@ -205,6 +205,263 @@ export const COMMUNITY_WORKOUTS: CommunityWorkout[] = [
     hoverTitle: "group-hover:text-[#bc13fe]",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCWaohV5DLt7cyLmr_GMZJLX2l6AZ_b2yr9x4sGBNgZBAB22iY8hxx1NboD7zJpnQpNb6GQsEONs4svknWXviLgtivEb9rRFa6qDX6N-K2zLuhP-bEpAZSngNqIwoAQsGLLTDpMm1JFLVtSZcOnkSxg9nnIUK5Yc8QeQOUqvNdiQdXR_kQmZ3BFaB4ENHZJ5MkxoFP__MXxuzVPmF_qW_YtAT8J7kYwVlLq5M1vjA9NO8HPP0JvoQ7aPCDoBwyx_NdKOAu-McpMXhM",
+  },
+];
+
+export const HISTORY_LOGS: WorkoutLog[] = [
+  {
+    id: "1",
+    name: "Upper Body Power",
+    date: "Today, 07:30 AM",
+    time: "07:30 AM",
+    duration: "58m 20s",
+    volume: "12,450 kg",
+    totalSets: 24,
+    prsBroken: 3,
+    tags: ["Hypertrophy", "Completed"],
+    isNewPR: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAL5cZserwafB4yxdyewFy9Ns58dLiND0qlgWhp5bMKiqIHOIE338bmIR2a3J9AvecffODcVu_1SYhuX3jELXW9tFdRnHariSmcbwm-KDMSC9DgNgbhGTW2x3U3tU0-TLhS_r7C8EfepKPZUxbIJmYsZsPUSVXv9vgtB7QgAvnu5diuzkxr_q0EqrS8OjvBbOtybQQCv9eZOzMfhVBYNL13aDAvfaPpV1U5tZdlauLyGPv3-IeZy9qk5efE-uhmwyF_evBeQXqyjss",
+    xp: 1250,
+    xpBreakdown: { volumeBase: 800, clanBonus: 200, achievements: 250 },
+    quest: { title: "Iron Forge Initiate", description: "Complete 3 Power workouts" },
+    exercises: [
+      {
+        id: "bench",
+        name: "Bench Press",
+        muscleGroup: "Chest",
+        category: "Compound",
+        equipment: "Barbell",
+        image:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuAL5cZserwafB4yxdyewFy9Ns58dLiND0qlgWhp5bMKiqIHOIE338bmIR2a3J9AvecffODcVu_1SYhuX3jELXW9tFdRnHariSmcbwm-KDMSC9DgNgbhGTW2x3U3tU0-TLhS_r7C8EfepKPZUxbIJmYsZsPUSVXv9vgtB7QgAvnu5diuzkxr_q0EqrS8OjvBbOtybQQCv9eZOzMfhVBYNL13aDAvfaPpV1U5tZdlauLyGPv3-IeZy9qk5efE-uhmwyF_evBeQXqyjss",
+        note: "Felt super strong on the lockouts today. Maybe try 102.5 next week.",
+        sets: [
+          { set: 1, weight: "90 kg", reps: 10, rpe: 7 },
+          { set: 2, weight: "95 kg", reps: 8, rpe: 8 },
+          { set: 3, weight: "100 kg", reps: 5, rpe: 9.5, isPR: true },
+        ],
+        estOneRM: 112.5,
+      },
+      {
+        id: "incline-db",
+        name: "Incline DB Press",
+        muscleGroup: "Chest",
+        category: "Compound",
+        equipment: "Dumbbell",
+        sets: [
+          { set: 1, weight: "32 kg", reps: 12, rpe: 8 },
+          { set: 2, weight: "34 kg", reps: 10, rpe: 9, isPR: true },
+        ],
+        estOneRM: 45,
+      },
+      {
+        id: "cable-tri",
+        name: "Cable Tricep Pushdown",
+        muscleGroup: "Arms",
+        category: "Isolation",
+        equipment: "Cable",
+        sets: [
+          { set: 1, weight: "25 kg", reps: 15, rpe: 7 },
+          { set: 2, weight: "30 kg", reps: 12, rpe: 8.5 },
+        ],
+        estOneRM: 42,
+      },
+    ],
+  },
+  {
+    id: "2",
+    name: "Leg Day Volume",
+    date: "Dec 12, 06:15 PM",
+    time: "06:15 PM",
+    duration: "1h 12m",
+    volume: "18,200 kg",
+    totalSets: 32,
+    prsBroken: 1,
+    tags: ["Strength", "Completed"],
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCWaohV5DLt7cyLmr_GMZJLX2l6AZ_b2yr9x4sGBNgZBAB22iY8hxx1NboD7zJpnQpNb6GQsEONs4svknWXviLgtivEb9rRFa6qDX6N-K2zLuhP-bEpAZSngNqIwoAQsGLLTDpMm1JFLVtSZcOnkSxg9nnIUK5Yc8QeQOUqvNdiQdXR_kQmZ3BFaB4ENHZJ5MkxoFP__MXxuzVPmF_qW_YtAT8J7kYwVlLq5M1vjA9NO8HPP0JvoQ7aPCDoBwyx_NdKOAu-McpMXhM",
+    xp: 1480,
+    xpBreakdown: { volumeBase: 1100, clanBonus: 220, achievements: 160 },
+    exercises: [
+      {
+        id: "squat",
+        name: "Back Squat",
+        muscleGroup: "Legs",
+        category: "Compound",
+        equipment: "Barbell",
+        sets: [
+          { set: 1, weight: "120 kg", reps: 5, rpe: 7 },
+          { set: 2, weight: "130 kg", reps: 5, rpe: 8 },
+          { set: 3, weight: "140 kg", reps: 5, rpe: 9 },
+          { set: 4, weight: "145 kg", reps: 3, rpe: 9.5, isPR: true },
+        ],
+        estOneRM: 168,
+      },
+      {
+        id: "rdl",
+        name: "Romanian Deadlift",
+        muscleGroup: "Hamstrings",
+        category: "Compound",
+        equipment: "Barbell",
+        sets: [
+          { set: 1, weight: "100 kg", reps: 10, rpe: 7 },
+          { set: 2, weight: "110 kg", reps: 8, rpe: 8 },
+          { set: 3, weight: "110 kg", reps: 8, rpe: 8.5 },
+        ],
+        estOneRM: 138,
+      },
+    ],
+  },
+  {
+    id: "3",
+    name: "HIIT Mobility Flow",
+    date: "Dec 10, 07:00 AM",
+    time: "07:00 AM",
+    duration: "35m 00s",
+    volume: "450 kcal",
+    totalSets: 0,
+    prsBroken: 0,
+    tags: ["Cardio", "Completed"],
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuC-9uHEKVPdKxKtQy8o8hYh5HdL2WeH24ABDXlLX2i2un19GH00HkPU-3eYtz0DlHHNoYYFLW-ZfvZbP46R7-H7NHD8aLHZiDP9so7Ujb7ErF0w-0zaS8qw4c_u8u0SkXEuLBK06f9khaHSSBeduehSlqh5E3bBLjEkoapHtarMaEKVcqa17CT9s8iE6PJVUMdg-NJhOFE5Xo5DZGQENwWOGHOR6648Gyj94HFdekcpzFg3iRdPecclvsTyrmUZrrHa72wuS-Q51vk",
+    xp: 640,
+    xpBreakdown: { volumeBase: 500, clanBonus: 100, achievements: 40 },
+    exercises: [],
+  },
+  {
+    id: "4",
+    name: "5×5 Strength Base",
+    date: "Dec 08, 06:45 PM",
+    time: "06:45 PM",
+    duration: "52m 10s",
+    volume: "10,500 kg",
+    totalSets: 15,
+    prsBroken: 2,
+    tags: ["Strength", "Completed"],
+    isNewPR: true,
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCZiZzsr4-V3fJzPK_zZKZ2Chjm00wDubu_9a4xI3MvBVe8JO3PGL_9h2DeZLb0meWM-Unn9DgJjy1m1ouiwUjFz16JsZWSu2-hgyuT4SqRmuCLBxYEvW5i9RRYfavgtHbGBiMCQ0hr1D6c3Ky8Vd4hoP-LpCrLhfJ6M2Sx2z8u-uglLlLZ_-vfQT5sYNDqMVUGrhrKeCwDO9ASQsSt4xQokt50koeRZa2qhLYaD9GDeuUqxvBhYF0bEdAFoQ8phVMvn-o5F1ha1fY",
+    xp: 1820,
+    xpBreakdown: { volumeBase: 1400, clanBonus: 280, achievements: 140 },
+    exercises: [
+      {
+        id: "deadlift",
+        name: "Deadlift",
+        muscleGroup: "Back",
+        category: "Compound",
+        equipment: "Barbell",
+        sets: [
+          { set: 1, weight: "160 kg", reps: 5, rpe: 7 },
+          { set: 2, weight: "170 kg", reps: 5, rpe: 8 },
+          { set: 3, weight: "180 kg", reps: 5, rpe: 9, isPR: true },
+        ],
+        estOneRM: 210,
+      },
+      {
+        id: "ohp-5x5",
+        name: "Overhead Press",
+        muscleGroup: "Shoulders",
+        category: "Compound",
+        equipment: "Barbell",
+        sets: [
+          { set: 1, weight: "70 kg", reps: 5, rpe: 7 },
+          { set: 2, weight: "75 kg", reps: 5, rpe: 8 },
+          { set: 3, weight: "80 kg", reps: 4, rpe: 9.5, isPR: true },
+        ],
+        estOneRM: 93,
+      },
+    ],
+  },
+];
+
+export const ACHIEVEMENTS: Achievement[] = [
+  { id: "streak7", icon: "wb_sunny", color: "#f59e0b", unlocked: true },
+  { id: "pr-crusher", icon: "construction", color: "#ef4444", unlocked: true },
+  { id: "fire-week", icon: "local_fire_department", color: "#f97316", unlocked: true },
+  { id: "clan-top", icon: "group", color: "#3b82f6", unlocked: true },
+  { id: "trophy", icon: "emoji_events", color: "#a855f7", unlocked: true },
+  { id: "speed", icon: "bolt", color: "#6b7280", unlocked: false },
+  { id: "endurance", icon: "favorite", color: "#6b7280", unlocked: false },
+  { id: "centurion", icon: "military_tech", color: "#6b7280", unlocked: false },
+];
+
+export const EXERCISE_DETAILS: ExerciseDetail[] = [
+  {
+    id: "deadlift",
+    name: "Deadlift",
+    level: "Advanced",
+    type: "Compound",
+    muscles: ["Back", "Glutes", "Hamstrings"],
+    equipment: "Barbell",
+    cues: [
+      { step: 1, title: "Set Your Stance", desc: "Feet hip-width apart. Barbell over mid-foot. Grip just outside legs." },
+      { step: 2, title: "Hips Back & Chest Up", desc: "Create tension. Pull the slack out of the bar. Engage lats by imagining squeezing oranges in your armpits." },
+      { step: 3, title: "Drive Through Heels", desc: "Push the floor away. Extend hips and knees simultaneously to lockout." },
+      { step: 4, title: "Control The Descent", desc: "Hinge at hips first, then bend knees once bar passes them. Do not drop the weight." },
+    ],
+    movers: [
+      { name: "Hamstrings", pct: 95 },
+      { name: "Gluteus Maximus", pct: 90 },
+      { name: "Erector Spinae", pct: 85 },
+    ],
+    historyData: [155, 160, 162, 170, 175, 180],
+  },
+  {
+    id: "bench",
+    name: "Bench Press",
+    level: "Intermediate",
+    type: "Compound",
+    muscles: ["Chest", "Triceps", "Shoulders"],
+    equipment: "Barbell",
+    cues: [
+      { step: 1, title: "Set Your Arch", desc: "Retract and depress shoulder blades. Maintain natural arch in lower back." },
+      { step: 2, title: "Grip Width", desc: "Slightly wider than shoulder width. Wrists stacked over elbows." },
+      { step: 3, title: "Bar Path", desc: "Lower bar to lower chest/upper abdomen. Slight diagonal press back to lockout." },
+      { step: 4, title: "Leg Drive", desc: "Push feet into floor throughout. Use full body tension for max power." },
+    ],
+    movers: [
+      { name: "Pectoralis Major", pct: 90 },
+      { name: "Triceps Brachii", pct: 70 },
+      { name: "Anterior Deltoid", pct: 60 },
+    ],
+    historyData: [85, 90, 90, 95, 98, 100],
+  },
+  {
+    id: "incline-db",
+    name: "Incline DB Press",
+    level: "Beginner",
+    type: "Compound",
+    muscles: ["Chest", "Shoulders"],
+    equipment: "Dumbbell",
+    cues: [
+      { step: 1, title: "Bench Angle", desc: "Set bench to 30–45 degrees. Higher angles shift load to shoulders." },
+      { step: 2, title: "Neutral Wrists", desc: "Keep wrists straight throughout. Don't let them flare outward." },
+      { step: 3, title: "Full Range", desc: "Lower until a stretch is felt in chest. Press to full lockout without locking elbows." },
+    ],
+    movers: [
+      { name: "Upper Pectoralis", pct: 85 },
+      { name: "Anterior Deltoid", pct: 65 },
+      { name: "Triceps Brachii", pct: 50 },
+    ],
+    historyData: [28, 30, 30, 32, 32, 34],
+  },
+  {
+    id: "cable-tri",
+    name: "Cable Tricep Pushdown",
+    level: "Beginner",
+    type: "Isolation",
+    muscles: ["Arms"],
+    equipment: "Cable",
+    cues: [
+      { step: 1, title: "Elbows In", desc: "Keep elbows pinned to your sides throughout. Avoid flaring them outward." },
+      { step: 2, title: "Hinge Forward Slightly", desc: "Slight forward lean engages triceps better. Don't lean excessively." },
+      { step: 3, title: "Full Extension", desc: "Lock out arms completely at the bottom. Squeeze triceps hard for 1 second." },
+    ],
+    movers: [
+      { name: "Triceps Brachii", pct: 95 },
+      { name: "Anconeus", pct: 40 },
+    ],
+    historyData: [20, 22, 25, 25, 28, 30],
   },
 ];
 

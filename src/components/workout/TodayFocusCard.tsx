@@ -57,10 +57,10 @@ export default function TodayFocusCard() {
             <span className="material-symbols-outlined group-hover/btn:animate-pulse">play_circle</span>
             Start Session
           </Link>
-          <button className="bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold uppercase tracking-widest px-6 py-4 rounded-lg flex items-center justify-center gap-2 transition-colors backdrop-blur-sm">
+          <Link href="/history/1" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold uppercase tracking-widest px-6 py-4 rounded-lg flex items-center justify-center gap-2 transition-colors backdrop-blur-sm">
             <span className="material-symbols-outlined text-gray-400">info</span>
             Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>

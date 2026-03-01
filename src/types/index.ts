@@ -52,3 +52,77 @@ export type RecentRoutine = {
   hoverTitle: string;
   gradientFrom: string;
 };
+
+export type LoggedSet = {
+  set: number;
+  weight: string;
+  reps: number;
+  rpe: number;
+  isPR?: boolean;
+};
+
+export type LoggedExercise = {
+  id: string;
+  name: string;
+  muscleGroup: string;
+  category: string;
+  equipment: string;
+  image?: string;
+  note?: string;
+  sets: LoggedSet[];
+  estOneRM: number;
+};
+
+export type XPBreakdown = {
+  volumeBase: number;
+  clanBonus: number;
+  achievements: number;
+};
+
+export type WorkoutLog = {
+  id: string;
+  name: string;
+  date: string;
+  time: string;
+  duration: string;
+  volume: string;
+  totalSets: number;
+  prsBroken: number;
+  tags: string[];
+  image?: string;
+  exercises: LoggedExercise[];
+  xp: number;
+  xpBreakdown: XPBreakdown;
+  quest?: { title: string; description: string };
+  isNewPR?: boolean;
+};
+
+export type Achievement = {
+  id: string;
+  icon: string;
+  color: string;
+  unlocked: boolean;
+};
+
+export type PerformanceCue = {
+  step: number;
+  title: string;
+  desc: string;
+};
+
+export type PrimaryMover = {
+  name: string;
+  pct: number;
+};
+
+export type ExerciseDetail = {
+  id: string;
+  name: string;
+  level: string;
+  type: string;
+  muscles: string[];
+  equipment: string;
+  cues: PerformanceCue[];
+  movers: PrimaryMover[];
+  historyData: number[];
+};
