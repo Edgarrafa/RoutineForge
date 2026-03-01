@@ -7,8 +7,15 @@ const INITIAL_TAGS = [
   { label: "Dumbbell", color: "cyan" as const },
 ];
 
-export default function ProgramSidebar() {
-  const [programName, setProgramName] = useState("12-Week Hypertrophy");
+type Props = {
+  builderType?: "day" | "weekly" | "program";
+};
+
+export default function ProgramSidebar({ builderType = "program" }: Props) {
+  const [programName, setProgramName] = useState(
+    builderType === "day" ? "My Session" : builderType === "weekly" ? "My Weekly Plan" : "12-Week Hypertrophy"
+  );
+  const [focus, setFocus] = useState("Strength");
   const [goal, setGoal] = useState("hypertrophy");
   const [duration, setDuration] = useState(12);
   const [tags, setTags] = useState(INITIAL_TAGS);
@@ -35,17 +42,17 @@ export default function ProgramSidebar() {
   return (
     <aside className="w-80 shrink-0 border-r border-[#f4257b]/20 bg-[#1a0f14]/60 backdrop-blur-sm flex flex-col overflow-y-auto">
       <div className="p-6 space-y-8">
-        {/* Program Metadata */}
+        {/* Metadata */}
         <div>
           <h3 className="text-xs font-bold text-[#f4257b] tracking-[0.2em] uppercase mb-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-sm">settings</span>
-            Program Metadata
+            {builderType === "day" ? "Session Metadata" : builderType === "weekly" ? "Plan Metadata" : "Program Metadata"}
           </h3>
           <div className="space-y-5">
-            {/* Program Name */}
+            {/* Name */}
             <div className="group">
               <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide group-focus-within:text-white transition-colors">
-                Program Name
+                {builderType === "day" ? "Session Name" : builderType === "weekly" ? "Plan Name" : "Program Name"}
               </label>
               <input
                 type="text"
@@ -55,49 +62,66 @@ export default function ProgramSidebar() {
               />
             </div>
 
-            {/* Goal */}
-            <div className="group">
-              <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide group-focus-within:text-white transition-colors">
-                Goal
-              </label>
-              <div className="relative">
-                <select
-                  value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                  className="w-full bg-[#0d060a]/80 border border-[#f4257b]/30 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#f4257b] appearance-none cursor-pointer"
-                >
-                  <option value="hypertrophy">Hypertrophy (Size)</option>
-                  <option value="strength">Strength (Power)</option>
-                  <option value="endurance">Endurance (Stamina)</option>
-                </select>
-                <span className="material-symbols-outlined absolute right-3 top-3 text-[#f4257b] pointer-events-none text-lg">
-                  expand_more
-                </span>
-              </div>
-            </div>
-
-            {/* Duration */}
-            <div className="group">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wide">
-                  Duration
+            {/* Focus (day) or Goal (weekly/program) */}
+            {builderType === "day" ? (
+              <div className="group">
+                <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide group-focus-within:text-white transition-colors">
+                  Focus
                 </label>
-                <span className="text-xs font-bold text-[#f4257b]">{duration} Weeks</span>
+                <input
+                  type="text"
+                  value={focus}
+                  onChange={(e) => setFocus(e.target.value)}
+                  placeholder="e.g. Upper Body, Legs…"
+                  className="w-full bg-[#0d060a]/80 border border-[#f4257b]/30 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#f4257b] focus:shadow-[0_0_10px_rgba(244,37,123,0.3)] transition-all placeholder:text-slate-600 font-medium"
+                />
               </div>
-              <input
-                type="range"
-                min={4}
-                max={24}
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[#f4257b]"
-              />
-              <div className="flex justify-between mt-1 text-[10px] text-gray-500 font-mono">
-                <span>4w</span>
-                <span>12w</span>
-                <span>24w</span>
+            ) : (
+              <div className="group">
+                <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide group-focus-within:text-white transition-colors">
+                  Goal
+                </label>
+                <div className="relative">
+                  <select
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                    className="w-full bg-[#0d060a]/80 border border-[#f4257b]/30 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#f4257b] appearance-none cursor-pointer"
+                  >
+                    <option value="hypertrophy">Hypertrophy (Size)</option>
+                    <option value="strength">Strength (Power)</option>
+                    <option value="endurance">Endurance (Stamina)</option>
+                  </select>
+                  <span className="material-symbols-outlined absolute right-3 top-3 text-[#f4257b] pointer-events-none text-lg">
+                    expand_more
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Duration — program only */}
+            {builderType === "program" && (
+              <div className="group">
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wide">
+                    Duration
+                  </label>
+                  <span className="text-xs font-bold text-[#f4257b]">{duration} Weeks</span>
+                </div>
+                <input
+                  type="range"
+                  min={2}
+                  max={24}
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[#f4257b]"
+                />
+                <div className="flex justify-between mt-1 text-[10px] text-gray-500 font-mono">
+                  <span>2w</span>
+                  <span>12w</span>
+                  <span>24w</span>
+                </div>
+              </div>
+            )}
 
             {/* Tags */}
             <div className="group">
@@ -186,7 +210,7 @@ export default function ProgramSidebar() {
           }`}
         >
           <span className="material-symbols-outlined text-lg">{saved ? "check_circle" : "save"}</span>
-          {saved ? "Saved!" : "Save Program"}
+          {saved ? "Saved!" : builderType === "day" ? "Save Session" : builderType === "weekly" ? "Save Plan" : "Save Program"}
         </button>
       </div>
     </aside>

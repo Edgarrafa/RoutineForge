@@ -6,7 +6,11 @@ import { useAuth } from "@/context/AuthContext";
 const AVATAR =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDsHGa_AW1SccIRCqPD-Rq0Y1-I1N6oc_3fuLgvB4IenXCNR2lXe96szI8IMOhbZBSMBM3PcugckQKpRDqZIf-q5pooSfvGCB5IDv0Gjy2E3o9pOXH7b49a5C5r2QFtbJ5CL9gjBDRliJ_bt0SlEwc9Ut6bh0q7BoAO476ZBS4z2q0KMMrWz9oTDRDo5_7hy40cOjqvVM6xfJGhPH07Nto4pgE2-eJUtXQ7rCiXu6NLaHdLiOZruEB1j5CF4f3x7PoDDz3Dhq8W6Yo";
 
-export default function BuilderHeader() {
+type Props = {
+  onBack?: () => void;
+};
+
+export default function BuilderHeader({ onBack }: Props) {
   const { logout } = useAuth();
   const router = useRouter();
 
@@ -27,12 +31,22 @@ export default function BuilderHeader() {
         </h1>
       </div>
 
-      {/* Status pill */}
-      <div className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#f4257b]/20 bg-[#f4257b]/5">
-        <span className="text-xs font-semibold text-[#f4257b] uppercase tracking-wider">Status:</span>
-        <span className="text-xs text-white">Drafting</span>
-        <div className="size-2 rounded-full bg-[#f4257b] animate-pulse" />
-      </div>
+      {/* Center: back button or status pill */}
+      {onBack ? (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-white hover:border-[#f4257b]/40 transition-all text-xs font-semibold uppercase tracking-wider"
+        >
+          <span className="material-symbols-outlined text-sm">arrow_back</span>
+          Change Type
+        </button>
+      ) : (
+        <div className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#f4257b]/20 bg-[#f4257b]/5">
+          <span className="text-xs font-semibold text-[#f4257b] uppercase tracking-wider">Status:</span>
+          <span className="text-xs text-white">Drafting</span>
+          <div className="size-2 rounded-full bg-[#f4257b] animate-pulse" />
+        </div>
+      )}
 
       {/* User */}
       <div className="flex items-center gap-3 cursor-pointer group" onClick={handleLogout} title="Logout">

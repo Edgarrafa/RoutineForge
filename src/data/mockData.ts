@@ -1,4 +1,4 @@
-import type { User, SessionExercise, CommunityWorkout, RecentRoutine, WorkoutLog, Achievement, ExerciseDetail } from "@/types";
+import type { User, SessionExercise, CommunityWorkout, RecentRoutine, WorkoutLog, Achievement, ExerciseDetail, PrebuiltDay, PrebuiltWeek } from "@/types";
 
 export const MOCK_USER: User = {
   name: "Cyber Lifter",
@@ -565,5 +565,221 @@ export const RECENT_ROUTINES: RecentRoutine[] = [
     accentOpacity: "rgba(0,243,255,0.2)",
     hoverTitle: "group-hover:text-[#00f3ff]",
     gradientFrom: "from-[#00f3ff]",
+  },
+];
+
+export const PREBUILT_DAYS: PrebuiltDay[] = [
+  {
+    id: "upper-strength",
+    name: "Upper Body Strength",
+    focus: "Chest, Shoulders & Back compound lifts",
+    tags: ["Strength", "Upper Body", "Barbell"],
+    difficulty: "Intermediate",
+    estimatedDuration: "55 min",
+    exercises: [
+      { name: "Bench Press", category: "Barbell • Compound", sets: 4, reps: "4-6", rpe: "8" },
+      { name: "Overhead Press", category: "Barbell • Compound", sets: 3, reps: "5", rpe: "8" },
+      { name: "Barbell Row", category: "Barbell • Compound", sets: 4, reps: "6", rpe: "8" },
+      { name: "Tricep Pushdown", category: "Cable • Isolation", sets: 3, reps: "10-12", rpe: "7" },
+    ],
+  },
+  {
+    id: "lower-power",
+    name: "Lower Body Power",
+    focus: "Squat & Deadlift strength focus",
+    tags: ["Power", "Legs", "Barbell"],
+    difficulty: "Advanced",
+    estimatedDuration: "65 min",
+    exercises: [
+      { name: "Back Squat", category: "Barbell • Compound", sets: 5, reps: "3-5", rpe: "9" },
+      { name: "Deadlift", category: "Barbell • Compound", sets: 3, reps: "3", rpe: "9" },
+      { name: "Leg Press", category: "Machine • Compound", sets: 3, reps: "10", rpe: "8" },
+    ],
+  },
+  {
+    id: "push-hypertrophy",
+    name: "Push Day",
+    focus: "Chest, Shoulders & Triceps hypertrophy",
+    tags: ["Hypertrophy", "Push", "Upper Body"],
+    difficulty: "Intermediate",
+    estimatedDuration: "60 min",
+    exercises: [
+      { name: "Incline Bench Press", category: "Barbell • Compound", sets: 4, reps: "8-10", rpe: "8" },
+      { name: "Overhead Press", category: "Barbell • Compound", sets: 3, reps: "10-12", rpe: "7" },
+      { name: "Incline DB Press", category: "Dumbbell • Compound", sets: 3, reps: "10-12", rpe: "8" },
+      { name: "Lateral Raise", category: "Dumbbell • Isolation", sets: 3, reps: "15-20", rpe: "7" },
+      { name: "Tricep Pushdown", category: "Cable • Isolation", sets: 3, reps: "12-15", rpe: "7" },
+    ],
+  },
+  {
+    id: "pull-hypertrophy",
+    name: "Pull Day",
+    focus: "Back, Biceps & Rear Delts hypertrophy",
+    tags: ["Hypertrophy", "Pull", "Upper Body"],
+    difficulty: "Intermediate",
+    estimatedDuration: "60 min",
+    exercises: [
+      { name: "Deadlift", category: "Barbell • Compound", sets: 3, reps: "5", rpe: "8" },
+      { name: "Cable Row", category: "Cable • Compound", sets: 4, reps: "10-12", rpe: "8" },
+      { name: "Pull-Up", category: "Bodyweight • Compound", sets: 3, reps: "8-10", rpe: "8" },
+      { name: "Bicep Curl", category: "Dumbbell • Isolation", sets: 3, reps: "12-15", rpe: "7" },
+    ],
+  },
+  {
+    id: "hiit-cardio",
+    name: "Full Body HIIT",
+    focus: "Metabolic conditioning & fat burn",
+    tags: ["Cardio", "HIIT", "Full Body"],
+    difficulty: "Intermediate",
+    estimatedDuration: "30 min",
+    exercises: [
+      { name: "Barbell Thruster", category: "Barbell • Compound", sets: 4, reps: "10", rpe: "9" },
+      { name: "Burpee", category: "Bodyweight • Cardio", sets: 4, reps: "15", rpe: "9" },
+      { name: "Box Jump", category: "Bodyweight • Power", sets: 3, reps: "10", rpe: "8" },
+      { name: "Kettlebell Swing", category: "Kettlebell • Power", sets: 3, reps: "20", rpe: "8" },
+    ],
+  },
+  {
+    id: "core-mobility",
+    name: "Core & Mobility",
+    focus: "Core stability, flexibility & recovery",
+    tags: ["Recovery", "Core", "Mobility"],
+    difficulty: "Beginner",
+    estimatedDuration: "35 min",
+    exercises: [
+      { name: "Plank", category: "Bodyweight • Core", sets: 3, reps: "60s", rpe: "6" },
+      { name: "Dead Bug", category: "Bodyweight • Core", sets: 3, reps: "10/side", rpe: "5" },
+      { name: "Hip Flexor Stretch", category: "Bodyweight • Mobility", sets: 2, reps: "60s/side", rpe: "4" },
+      { name: "Cat-Cow", category: "Bodyweight • Mobility", sets: 2, reps: "10", rpe: "3" },
+    ],
+  },
+];
+
+const PPL_PUSH: PrebuiltDay["exercises"] = [
+  { name: "Bench Press", category: "Barbell • Compound", sets: 4, reps: "8-10", rpe: "8" },
+  { name: "Overhead Press", category: "Barbell • Compound", sets: 3, reps: "10", rpe: "7" },
+  { name: "Incline DB Press", category: "Dumbbell • Compound", sets: 3, reps: "12", rpe: "8" },
+  { name: "Lateral Raise", category: "Dumbbell • Isolation", sets: 3, reps: "15", rpe: "7" },
+  { name: "Tricep Pushdown", category: "Cable • Isolation", sets: 3, reps: "12", rpe: "7" },
+];
+const PPL_PULL: PrebuiltDay["exercises"] = [
+  { name: "Deadlift", category: "Barbell • Compound", sets: 3, reps: "5", rpe: "8" },
+  { name: "Cable Row", category: "Cable • Compound", sets: 4, reps: "10", rpe: "8" },
+  { name: "Pull-Up", category: "Bodyweight • Compound", sets: 3, reps: "8", rpe: "8" },
+  { name: "Bicep Curl", category: "Dumbbell • Isolation", sets: 3, reps: "12", rpe: "7" },
+];
+const PPL_LEGS: PrebuiltDay["exercises"] = [
+  { name: "Back Squat", category: "Barbell • Compound", sets: 4, reps: "8", rpe: "8" },
+  { name: "Romanian Deadlift", category: "Barbell • Compound", sets: 3, reps: "10", rpe: "8" },
+  { name: "Leg Press", category: "Machine • Compound", sets: 3, reps: "12", rpe: "7" },
+  { name: "Leg Curl", category: "Machine • Isolation", sets: 3, reps: "12", rpe: "7" },
+];
+
+export const PREBUILT_WEEKS: PrebuiltWeek[] = [
+  {
+    id: "ppl",
+    name: "Push / Pull / Legs",
+    description: "Classic 6-day split targeting each muscle group twice per week.",
+    daysPerWeek: 6,
+    focus: "Hypertrophy",
+    days: [
+      { name: "Push Day A", focus: "Chest, Shoulders, Triceps", exercises: PPL_PUSH },
+      { name: "Pull Day A", focus: "Back, Biceps, Rear Delts", exercises: PPL_PULL },
+      { name: "Leg Day A", focus: "Quads, Hamstrings, Calves", exercises: PPL_LEGS },
+      null,
+      { name: "Push Day B", focus: "Chest, Shoulders, Triceps", exercises: PPL_PUSH },
+      { name: "Pull Day B", focus: "Back, Biceps, Rear Delts", exercises: PPL_PULL },
+      { name: "Leg Day B", focus: "Quads, Hamstrings, Calves", exercises: PPL_LEGS },
+    ],
+  },
+  {
+    id: "5x5",
+    name: "5×5 Strength",
+    description: "3-day full-body strength program built around the big lifts.",
+    daysPerWeek: 3,
+    focus: "Strength",
+    days: [
+      {
+        name: "Workout A",
+        focus: "Squat, Bench, Row",
+        exercises: [
+          { name: "Back Squat", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+          { name: "Bench Press", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+          { name: "Barbell Row", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+        ],
+      },
+      null,
+      {
+        name: "Workout B",
+        focus: "Squat, OHP, Deadlift",
+        exercises: [
+          { name: "Back Squat", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+          { name: "Overhead Press", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+          { name: "Deadlift", category: "Barbell • Compound", sets: 1, reps: "5", rpe: "9" },
+        ],
+      },
+      null,
+      {
+        name: "Workout A",
+        focus: "Squat, Bench, Row",
+        exercises: [
+          { name: "Back Squat", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+          { name: "Bench Press", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+          { name: "Barbell Row", category: "Barbell • Compound", sets: 5, reps: "5", rpe: "8" },
+        ],
+      },
+      null,
+      null,
+    ],
+  },
+  {
+    id: "upper-lower",
+    name: "Upper / Lower Split",
+    description: "4-day split alternating upper and lower body sessions.",
+    daysPerWeek: 4,
+    focus: "Hypertrophy / Strength",
+    days: [
+      {
+        name: "Upper Body A",
+        focus: "Chest, Back, Shoulders, Arms",
+        exercises: [
+          { name: "Bench Press", category: "Barbell • Compound", sets: 4, reps: "6-8", rpe: "8" },
+          { name: "Barbell Row", category: "Barbell • Compound", sets: 4, reps: "6-8", rpe: "8" },
+          { name: "Overhead Press", category: "Barbell • Compound", sets: 3, reps: "8-10", rpe: "7" },
+          { name: "Pull-Up", category: "Bodyweight • Compound", sets: 3, reps: "8", rpe: "8" },
+        ],
+      },
+      {
+        name: "Lower Body A",
+        focus: "Quads, Hamstrings, Glutes",
+        exercises: [
+          { name: "Back Squat", category: "Barbell • Compound", sets: 4, reps: "6-8", rpe: "8" },
+          { name: "Romanian Deadlift", category: "Barbell • Compound", sets: 3, reps: "8-10", rpe: "8" },
+          { name: "Leg Press", category: "Machine • Compound", sets: 3, reps: "10-12", rpe: "7" },
+        ],
+      },
+      null,
+      {
+        name: "Upper Body B",
+        focus: "Chest, Back, Shoulders, Arms",
+        exercises: [
+          { name: "Incline Bench Press", category: "Barbell • Compound", sets: 4, reps: "8-10", rpe: "8" },
+          { name: "Cable Row", category: "Cable • Compound", sets: 4, reps: "10-12", rpe: "8" },
+          { name: "Lateral Raise", category: "Dumbbell • Isolation", sets: 3, reps: "15", rpe: "7" },
+          { name: "Bicep Curl", category: "Dumbbell • Isolation", sets: 3, reps: "12", rpe: "7" },
+        ],
+      },
+      {
+        name: "Lower Body B",
+        focus: "Posterior chain & accessories",
+        exercises: [
+          { name: "Deadlift", category: "Barbell • Compound", sets: 4, reps: "5", rpe: "9" },
+          { name: "Bulgarian Split Squat", category: "Dumbbell • Compound", sets: 3, reps: "10/side", rpe: "8" },
+          { name: "Leg Curl", category: "Machine • Isolation", sets: 3, reps: "12", rpe: "7" },
+        ],
+      },
+      null,
+      null,
+    ],
   },
 ];

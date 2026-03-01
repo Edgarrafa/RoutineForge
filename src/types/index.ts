@@ -126,3 +126,36 @@ export type ExerciseDetail = {
   movers: PrimaryMover[];
   historyData: number[];
 };
+
+export type TemplateExercise = {
+  name: string;
+  category: string;
+  sets: number;
+  reps: string;
+  rpe: string;
+};
+
+export type PrebuiltDay = {
+  id: string;
+  name: string;
+  focus: string;
+  tags: string[];
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  estimatedDuration: string;
+  exercises: TemplateExercise[];
+};
+
+export type PrebuiltWeekDay = {
+  name: string;
+  focus: string;
+  exercises: TemplateExercise[];
+} | null;
+
+export type PrebuiltWeek = {
+  id: string;
+  name: string;
+  description: string;
+  daysPerWeek: number;
+  focus: string;
+  days: PrebuiltWeekDay[]; // 7 entries, null = rest
+};

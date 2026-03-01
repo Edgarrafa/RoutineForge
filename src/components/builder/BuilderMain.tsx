@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { PrebuiltDay, PrebuiltWeek, TemplateExercise } from "@/types";
 import ExerciseLibraryModal, { type LibraryExercise } from "./ExerciseLibraryModal";
+import PrebuiltDayPicker from "./PrebuiltDayPicker";
+import PrebuiltWeekPicker from "./PrebuiltWeekPicker";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -139,6 +142,8 @@ export default function BuilderMain() {
   const [weeks, setWeeks] = useState<BuilderWeek[]>(INITIAL_WEEKS);
   const [activeWeek, setActiveWeek] = useState(0);
   const [modalForDay, setModalForDay] = useState<number | null>(null);
+  const [dayPickerForDay, setDayPickerForDay] = useState<number | null>(null);
+  const [weekPickerOpen, setWeekPickerOpen] = useState(false);
   const [copied, setCopied] = useState<number | null>(null);
 
   const wIdx = activeWeek;
@@ -275,6 +280,46 @@ export default function BuilderMain() {
   function handleCopy(dayNum: number) {
     setCopied(dayNum);
     setTimeout(() => setCopied(null), 2000);
+  }
+
+  function templateToBuilderEx(te: TemplateExercise, offset: number): BuilderExercise {
+    return {
+      id: Date.now() + offset,
+      name: te.name,
+      category: te.category,
+      image: "",
+      sets: te.sets,
+      reps: te.reps,
+      rpe: te.rpe,
+      individualReps: false,
+      setEntries: [],
+      chainWithNext: false,
+    };
+  }
+
+  function loadDayTemplate(dayNum: number, template: PrebuiltDay) {
+    const exercises = template.exercises.map((te, i) => templateToBuilderEx(te, i));
+    updateDay(dayNum, { name: template.name, focus: template.focus, isRest: false, exercises });
+    setDayPickerForDay(null);
+  }
+
+  function loadWeekTemplate(template: PrebuiltWeek) {
+    const newDays: BuilderDay[] = DAY_LABELS.map((label, i) => {
+      const tDay = template.days[i];
+      if (!tDay) {
+        return { dayNum: i + 1, label, name: "", focus: "", isRest: true, exercises: [] };
+      }
+      return {
+        dayNum: i + 1,
+        label,
+        name: tDay.name,
+        focus: tDay.focus,
+        isRest: false,
+        exercises: tDay.exercises.map((te, j) => templateToBuilderEx(te, i * 100 + j)),
+      };
+    });
+    setWeeks((prev) => prev.map((w, wi) => (wi !== wIdx ? w : { days: newDays })));
+    setWeekPickerOpen(false);
   }
 
   // ── Day ordinal helper ─────────────────────────────────────────────────────
@@ -490,19 +535,26 @@ export default function BuilderMain() {
                   <p className="text-xs text-slate-500">Empty Routine</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => toggleRest(day.dayNum)}
-                  className="text-xs text-slate-500 hover:text-slate-300 transition-colors opacity-0 group-hover:opacity-100"
+                  className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Mark Rest
                 </button>
                 <button
+                  onClick={() => setDayPickerForDay(day.dayNum)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 hover:bg-[#a855f7] hover:text-white transition-all text-xs font-bold uppercase"
+                >
+                  <span className="material-symbols-outlined text-sm">library_books</span>
+                  Use Template
+                </button>
+                <button
                   onClick={() => setModalForDay(day.dayNum)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#f4257b]/10 text-[#f4257b] border border-[#f4257b]/20 hover:bg-[#f4257b] hover:text-white transition-all shadow-[0_0_10px_rgba(244,37,123,0.3)] opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f4257b]/10 text-[#f4257b] border border-[#f4257b]/20 hover:bg-[#f4257b] hover:text-white transition-all shadow-[0_0_10px_rgba(244,37,123,0.3)] text-xs font-bold uppercase"
                 >
                   <span className="material-symbols-outlined text-sm">add</span>
-                  <span className="text-xs font-bold uppercase">Build</span>
+                  From Scratch
                 </button>
               </div>
             </div>
@@ -612,11 +664,23 @@ export default function BuilderMain() {
 
   return (
     <section className="flex-1 flex flex-col min-w-0 bg-[#0d060a]/30 relative">
-      {/* Exercise Library Modal */}
+      {/* Modals */}
       {modalForDay !== null && (
         <ExerciseLibraryModal
           onClose={() => setModalForDay(null)}
           onAdd={(libEx) => addExercise(modalForDay, libEx)}
+        />
+      )}
+      {dayPickerForDay !== null && (
+        <PrebuiltDayPicker
+          onClose={() => setDayPickerForDay(null)}
+          onSelect={(template) => loadDayTemplate(dayPickerForDay, template)}
+        />
+      )}
+      {weekPickerOpen && (
+        <PrebuiltWeekPicker
+          onClose={() => setWeekPickerOpen(false)}
+          onSelect={loadWeekTemplate}
         />
       )}
 
@@ -665,6 +729,25 @@ export default function BuilderMain() {
 
       {/* Scrollable Day Canvas */}
       <div className="flex-1 overflow-y-auto p-8 space-y-4 pb-56">
+        {/* Week template banner — shown when all days are rest */}
+        {currentDays.every((d) => d.isRest) && (
+          <div className="flex items-center justify-between p-4 rounded-xl border border-[#a855f7]/30 bg-[#a855f7]/5 mb-2">
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-[#a855f7] text-2xl">calendar_view_week</span>
+              <div>
+                <p className="text-white font-bold text-sm">This week is empty</p>
+                <p className="text-slate-500 text-xs">Load a pre-built week structure to get started quickly.</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setWeekPickerOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#a855f7]/10 border border-[#a855f7]/30 text-[#a855f7] text-xs font-bold uppercase tracking-wider hover:bg-[#a855f7] hover:text-white transition-all"
+            >
+              <span className="material-symbols-outlined text-sm">library_books</span>
+              Load Week Template
+            </button>
+          </div>
+        )}
         {currentDays.map((day) => renderDay(day))}
       </div>
 

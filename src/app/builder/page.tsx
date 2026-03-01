@@ -1,15 +1,21 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import BuilderHeader from "@/components/builder/BuilderHeader";
+import BuilderTypeSelector from "@/components/builder/BuilderTypeSelector";
+import DayBuilder from "@/components/builder/DayBuilder";
+import WeeklyBuilder from "@/components/builder/WeeklyBuilder";
 import ProgramSidebar from "@/components/builder/ProgramSidebar";
 import BuilderMain from "@/components/builder/BuilderMain";
+
+type BuilderType = "day" | "weekly" | "program";
 
 export default function BuilderPage() {
   const { isLoggedIn, mounted } = useAuth();
   const router = useRouter();
+  const [builderType, setBuilderType] = useState<BuilderType | null>(null);
 
   useEffect(() => {
     if (mounted && !isLoggedIn) {
@@ -36,11 +42,20 @@ export default function BuilderPage() {
         />
       </div>
 
-      <BuilderHeader />
+      <BuilderHeader onBack={builderType ? () => setBuilderType(null) : undefined} />
 
       <main className="relative z-10 flex flex-1 overflow-hidden">
-        <ProgramSidebar />
-        <BuilderMain />
+        {!builderType && (
+          <BuilderTypeSelector onSelect={setBuilderType} />
+        )}
+        {builderType === "day" && <DayBuilder />}
+        {builderType === "weekly" && <WeeklyBuilder />}
+        {builderType === "program" && (
+          <>
+            <ProgramSidebar builderType="program" />
+            <BuilderMain />
+          </>
+        )}
       </main>
     </div>
   );
