@@ -3,6 +3,11 @@ import Link from "next/link";
 const BG_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuAL5cZserwafB4yxdyewFy9Ns58dLiND0qlgWhp5bMKiqIHOIE338bmIR2a3J9AvecffODcVu_1SYhuX3jELXW9tFdRnHariSmcbwm-KDMSC9DgNgbhGTW2x3U3tU0-TLhS_r7C8EfepKPZUxbIJmYsZsPUSVXv9vgtB7QgAvnu5diuzkxr_q0EqrS8OjvBbOtybQQCv9eZOzMfhVBYNL13aDAvfaPpV1U5tZdlauLyGPv3-IeZy9qk5efE-uhmwyF_evBeQXqyjss";
 
+// TODO: fetch dynamic data at mount:
+//   const [today, setToday] = useState<TodayWorkout | null>(null);
+//   useEffect(() => { workoutApi.getTodayWorkout().then(setToday); }, []);
+// Then replace hardcoded strings ("Upper Body Power", "45-60 MIN", "HIGH", "850") with today.* fields.
+// Import: import { workoutApi, type TodayWorkout } from "@/lib/api";
 export default function TodayFocusCard() {
   return (
     <div className="cyber-card rounded-2xl overflow-hidden relative shadow-neon group">

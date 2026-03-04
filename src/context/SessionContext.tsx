@@ -31,6 +31,13 @@ const SessionContext = createContext<SessionContextValue>({
 });
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
+  // TODO: replace SESSION_EXERCISES + WORKOUT_NAME with:
+  //   const [sessionData, setSessionData] = useState<SessionData | null>(null);
+  //   useEffect(() => {
+  //     const id = new URLSearchParams(window.location.search).get("sessionId") ?? "mock";
+  //     sessionsApi.getSession(id).then(setSessionData);
+  //   }, []);
+  // Then pass sessionData.workoutName and sessionData.exercises to the Provider value below.
   const [currentIndex, setCurrentIndex] = useState(0);
   const [restTimeLeft, setRestTimeLeft] = useState(0);
   const [restIsRunning, setRestIsRunning] = useState(false);
@@ -60,6 +67,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }
 
   function advanceExercise() {
+    // TODO: call sessionsApi.completeSession(sessionId) when currentIndex reaches the last exercise
     setCurrentIndex((v) => Math.min(v + 1, SESSION_EXERCISES.length - 1));
     skipRest();
   }

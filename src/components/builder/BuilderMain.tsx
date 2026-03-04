@@ -207,10 +207,12 @@ export default function BuilderMain({ onBack }: Props) {
             }
       )
     );
+    // TODO: persist to server — await programsApi.addExerciseToDay(programId, dayNum, { name: libEx.name, category, sets: 3, reps: "8-12", rpe: "8" })
     setModalForDay(null);
   }
 
   function removeExercise(dayNum: number, exId: number) {
+    // TODO: persist to server — await programsApi.removeExerciseFromDay(programId, dayNum, String(exId))
     setWeeks((prev) =>
       prev.map((w, wi) =>
         wi !== wIdx

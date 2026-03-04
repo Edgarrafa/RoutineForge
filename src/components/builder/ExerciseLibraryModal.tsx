@@ -86,6 +86,12 @@ const SQ_IMG =
 const LP_IMG =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuCenjHDAWxfnkkD-T5x-rw5evl4gJdaKFSVA8kRoRifCsleB1aYPG-3PWLE4zP3OcY8hF1TtMQdSEf_rbu6OQUPhf0MC1AyrXweY6qNA55YUODrI6WpZerTzbyv6XUBLfAW0gDR-s0XfIEKG1BgxSESvdyQI20H6DPTndlxsQz6fYjEsuNVOTQQXNaTE2QCAP5hJNbLgTwRIj-9d8lvIRDMaXvEnC2k4RGxVWNuFjz6Tz0UgtOvPLyIfKjPa4aUT6_526zC4t3GoKU";
 
+// TODO: replace this inline array with:
+//   const [exercises, setExercises] = useState<LibraryExerciseSummary[]>([]);
+//   useEffect(() => {
+//     exercisesApi.getExercises({ category, equipment, bodyPart, query }).then(setExercises);
+//   }, [category, equipment, bodyPart, query]);
+// Import: import { exercisesApi, type LibraryExerciseSummary } from "@/lib/api";
 const EXERCISES: LibraryExercise[] = [
   // Back (40+)
   { id: "deadlift", name: "Conventional Deadlift", bodyPart: "Back", category: "Compound", equipment: "Barbell", subcategory: "Hip Hinge", muscles: ["GL", "HV", "LB", "LT", "UB", "ES", "TP"] },

@@ -160,3 +160,31 @@ export type PrebuiltWeek = {
   focus: string;
   days: PrebuiltWeekDay[]; // 7 entries, null = rest
 };
+
+export type Program = {
+  id: string;
+  name: string;
+  goal: string;
+  durationWeeks: number;
+  tags: string[];
+  isPublic: boolean;
+  createdAt: string;
+};
+
+export type TodayWorkout = {
+  sessionId: string;
+  name: string;
+  estimatedMinutes: number;
+  intensity: string;
+  estimatedXp: number;
+  programName: string;
+  programWeek: number;
+  programTotalWeeks: number;
+};
+
+export type WeekWorkout = {
+  dayIndex: number; // 0 = Monday
+  name: string;
+  sub: string;
+  isRest: boolean;
+};

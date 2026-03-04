@@ -21,16 +21,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // TODO: replace localStorage check with: const user = await authApi.getMe(); setIsLoggedIn(user !== null);
     setIsLoggedIn(localStorage.getItem("rf_auth") === "true");
     setMounted(true);
   }, []);
 
   function login() {
+    // TODO: replace with: await authApi.login(email, password) — update signature to accept (email, password)
     localStorage.setItem("rf_auth", "true");
     setIsLoggedIn(true);
   }
 
   function logout() {
+    // TODO: replace with: await authApi.logout()
     localStorage.removeItem("rf_auth");
     setIsLoggedIn(false);
   }

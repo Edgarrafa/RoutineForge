@@ -24,6 +24,7 @@ export default function ProgramSidebar({ builderType = "program" }: Props) {
   const [saved, setSaved] = useState(false);
 
   function handleSave() {
+    // TODO: persist to server — await programsApi.createProgram({ name: programName, goal, durationWeeks: duration, tags: tags.map(t => t.label), isPublic })
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   }

@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+// TODO: replace BASE_DAYS with dynamic data:
+//   const [days, setDays] = useState<WeekWorkout[]>([]);
+//   useEffect(() => { workoutApi.getWeekWorkouts(weekOffset).then(setDays); }, [weekOffset]);
+// Import: import { workoutApi, type WeekWorkout } from "@/lib/api";
 const BASE_DAYS = [
   { name: "Upper Body Power",  sub: "4 Exercises",   icon: "fitness_center", iconColor: "text-[#a855f7]" },
   { name: "Lower Body Power",  sub: "5 Exercises",   icon: "fitness_center", iconColor: "text-gray-600" },

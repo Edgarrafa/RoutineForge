@@ -21,16 +21,19 @@ const UserContext = createContext<UserContextValue>({
 });
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
+  // TODO: replace static init with: useEffect(() => { userApi.getUserProfile().then(setUser); }, [])
   const [user] = useState<User>(MOCK_USER);
   const [todayCalories, setTodayCalories] = useState(0);
   const [todayWeight, setTodayWeight] = useState(0);
 
   function logCalories(kcal: number) {
     setTodayCalories((prev) => prev + kcal);
+    // TODO: sync to server — await userApi.logCalories(kcal)
   }
 
   function logWeight(kg: number) {
     setTodayWeight(kg);
+    // TODO: sync to server — await userApi.logWeight(kg)
   }
 
   return (
