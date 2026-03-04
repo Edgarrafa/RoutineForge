@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc --noEmit)"
+      "Bash(npx tsc --noEmit)",
+      "Bash(node --version)",
+      "Bash(node \"c:/Users/Riugal/Documents/code/Repos/routine-forge/update_muscles.mjs\")"
     ]
   }
 }
